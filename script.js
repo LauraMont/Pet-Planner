@@ -9,11 +9,7 @@
     Otro valor: vuelve a preguntar
 */
 function Mostrar_perfil(nombre,raza,peso,vacunas,bitacora){
-    alert("Perfil de " +nombre+ "\nraza: " +raza+ "\nedad: " +edad+ "años"+"\npeso:" +peso+ "\nvacunas: " +vacunas+ "\nbitacora: " +bitacora);
-}
-nuevo_peso = ()=>prompt("Ingrese nuevo peso");
-function Editar_perfil(peso){
-    peso = prompt("Ingrese nuevo peso");
+    alert("Perfil de " +nombre+ "\nraza: " +raza+ "\nedad: " +edad+ "años"+"\npeso:" +peso+ + "kg" + "\nvacunas: " +vacunas+ "\nbitacora: " +bitacora);
 }
 
 let opcion = '1';
@@ -25,7 +21,7 @@ let password = "Laura1234";
 let nombre = "Sasha";
 let edad = 5 ; 
 let raza = "Mezcla";
-let peso = "10kg";
+let peso = 10;
 let vacunas = "Antirabica";
 let bitacora = "10/07/2022 :Visita al veterinario- se le dio a vacuna antirrabica\n"; 
 
