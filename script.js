@@ -5,57 +5,151 @@
     2:Hacer una nota rapida (Por ahora solo se puede escribir solo 1,por lo tato se sobreescribe la anterior)
     3:Editar perfil medico 
     4.Ver mis notas rapidas   
+    5:Agregar mascota
     0:Salir
     Otro valor: vuelve a preguntar
 */
-function Mostrar_perfil(nombre,raza,peso,vacunas,bitacora){
-    alert("Perfil de " +nombre+ "\nraza: " +raza+ "\nedad: " +edad+ "años"+"\npeso:" +peso+ + "kg" + "\nvacunas: " +vacunas+ "\nbitacora: " +bitacora);
+/* Clases */
+class Usuario{
+    constructor(user ,psw){
+        this.user = user;
+        this.password = psw;
+    }
+    cambiarUsuario(){
+        let nuevoUsuario = prompt("Ingrese nuevo usuario");
+        this.usuario = nuevoUsuario;
+    }
+    cambiarPsw(){
+        let nuevaPsw = prompt("Ingrese anterior contraseña");
+        if(nuevaPsw = this.password){
+            nuevaPsw = prompt("Ingrese nueva constraseña");
+            this.password = nuevaPsw
+        }else{
+            alert("Contraseña invalida");
+        }
+    }
+}
+class Mascota{
+    constructor(nombre, especie, edad, peso, raza, vacunas, bitacora){
+        this.nombre = nombre;
+        this.especie = especie;
+        this.edad = edad;
+        this.peso = peso;
+        this.raza = "none";
+        this.bitacora = [];
+        this.vacunas = [];
+
+        if(raza != undefined){
+            this.raza = raza;
+        }
+        if(vacunas != undefined){
+            this.vacunas.push(vacunas) ;
+        }
+        if(bitacora != undefined){
+            this.bitacora.push(bitacora) ;
+        }
+    }
+    CambiarNombre(){
+        this.nombre = prompt("Ingrese nuevo nombre: ");
+    }
+    CambiarEspecie(){
+        this.especie = prompt("Ingrese especie: ");
+    }
+    CambiarPeso(){
+        this.peso = prompt("Ingrese peso: ");
+    }
+    CambiarEdad(){
+        this.edad = prompt("Ingrese edad: ");
+    }
+    CambiarRaza(){
+        this.raza = prompt("Ingrese raza: ");
+    }
+    AgregarBitacora(){
+        this.bitacora.push(prompt("Ingrese nueva bitacora: "));
+    }
+    AgregarVacunas(){
+        this.vacunas.push(prompt("Ingrese nueva vacuna: "));
+    }
+
+    MostrarPerfil(){
+        alert("Perfil de " + this.nombre + "\nraza: " + this.raza + "\nedad: " + this.edad + "años" + "\npeso:" +this.peso + "kg" + "\nvacunas: " +this.vacunas.join('\n')+ "\nbitacora: " +this.bitacora.join('\n'));
+    }
+}
+/* Fin de clases */
+/* Funciones */
+/* --- Instanciar objeto con una función ---Creditos a la tutora Daniela <3 */
+function agregarMascota() {
+    const nombre = prompt("Ingresa el nombre:");
+    const especie = prompt("Ingresar especie:");
+    const edad = prompt("Ingresar edad:");
+    const peso = prompt("Ingresar peso: ");
+
+    return new Mascota(nombre, especie, edad, peso);
 }
 
-let opcion = '1';
-let notaRapida = "Comprar comida para sasha";
-//Variables de inicio de sesion
-let usuario = "LauraMontano";
-let password = "Laura1234";
-//Variables de perfil medico
-let nombre = "Sasha";
-let edad = 5 ; 
-let raza = "Mezcla";
-let peso = 10;
-let vacunas = "Antirabica";
-let bitacora = "10/07/2022 :Visita al veterinario- se le dio a vacuna antirrabica\n"; 
+function elegirMascota(Mascotas){
+    let texto = " ";
+    for(let index = 0 ; index <Mascotas.length ; index++){
+        texto += (index+1) + ":" + Mascotas[index].nombre + "\n";
+    }
+    return parseInt(prompt("Ingrese el indice de la mascota deseada\n" + texto))-1;
 
+}
+
+function imprimirTexto(texto){
+    if(texto.length>=1){
+        alert(texto.join('\n'));
+    }
+    else{
+        alert("No hay nada escrito en las notas rapidas.");
+    }
+}
+/* Fin de Funciones */
+/* Variables */
+let opcion = '1';
+let notaRapida = [];
+let usuario = new Usuario ("LauraMontaño" , "Laura1234");
+let mascotas = [new Mascota("Sasha", "especie", 5, 10)];2
+/* Fin de Variables */
 for(let i = 5; i>0 ; i--){
     let user = prompt("Ingrese usuario: ");
     let psw = prompt("Ingrese contraseña: ");
 
-    if((user === usuario) && (psw === password)){
+    if((user === usuario.user) && (psw === usuario.password)){
         while(opcion !== '0'){
-            opcion = prompt("Ingrese opcion deseada: \n1:Ver perfil medico de  mi mascota \n2:Hacer una nota rapida \n3:Editar perfil medico \n4:Ver mis notas rapidas \n0:Salir  ");
+            opcion = prompt("Ingrese opcion deseada: \n1:Ver perfil medico de mis mascotas \n2:Hacer una nota rapida \n3:Editar perfil medico \n4:Ver mis notas rapidas \n5:Agregar nueva mascota\n0:Salir  ");
             switch(opcion){
                 case('0'):console.log("Usuario cerro sesión");
                     break;
-                case('1'):Mostrar_perfil(nombre,raza,peso,vacunas,bitacora);
+                case('1'):
+                    for (const key of mascotas) {
+                        key.MostrarPerfil();
+                    }
                     break;
-                case('2'):notaRapida = prompt("Ingrese nota rapida: ") ;
+                case('2'):let notaNueva = prompt("Ingrese nota rapida: ") ;
+                    notaRapida.push(notaNueva);
                     break;
-                case('3'):let opcion = prompt("Ingrese una opcion: \n1:Editar nombre.\n2:Editar raza.\n3:Editar edad.\n4:Editar peso.\n5:Editar bitacora.\n6:Editar vacunas.");
-                    switch(opcion){
-                        case ('1'):nombre = prompt("Ingrese nombre: ");
+                case('3'):
+                    let indice = elegirMascota(mascotas);
+                    let _opcion = prompt("Ingrese una opcion: \n1:Editar nombre.\n2:Editar raza.\n3:Editar edad.\n4:Editar peso.\n5:Editar bitacora.\n6:Editar vacunas.");
+                    switch(_opcion){
+                        case ('1'):mascotas[indice].CambiarNombre();
                             break;
-                        case ('2'):raza = prompt("Ingrese raza: ");
+                        case ('2'):mascotas[indice].CambiarRaza();
                             break;
-                        case ('3'):edad = prompt("Ingrese nueva edad: ");
+                        case ('3'):mascotas[indice].CambiarEdad(); 
                             break;
-                        case ('4'):peso = prompt("Ingrese nuevo peso: ");
+                        case ('4'):mascotas[indice].CambiarPeso(); 
                             break;
-                        case ('5'):bitacora += " " + prompt("Ingrese nueva bitacora: ") + "\n";
+                        case ('5'):mascotas[indice].AgregarBitacora(); 
                             break;
-                        case ('6'):vacunas = prompt("Ingrese nuevas vacunas: ");
+                        case ('6'):mascotas[indice].AgregarVacunas();
                             break;
                     }
                     break;
-                case('4'):alert(notaRapida);
+                case('4'):imprimirTexto(notaRapida);
+                    break;
+                case('5'):mascotas.push(agregarMascota()) ;
                     break;
                 default: alert("Opcion Invalida.");
                     break;
@@ -67,4 +161,3 @@ for(let i = 5; i>0 ; i--){
     }
     
 }
-
