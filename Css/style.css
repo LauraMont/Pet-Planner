@@ -1,0 +1,33 @@
+#petCards .card,
+.bg-petcard{
+    margin-top: 4rem;
+    width: 18rem;
+    background-color: #CA955C;
+}
+
+body,
+#NotasRapidas .c2{
+    background-color: rgb(237, 223, 179);
+}
+
+#header nav,
+#perfilUsuario{
+    background-color: #76BA99;
+}
+#perfilUsuario .card{
+    border: none;
+    background-color:#76BA99;
+}
+
+#NotasRapidas ,
+#mainMascotas .card,
+#formulario{
+    background-color: #CA955C;
+}
+footer,
+#NotasRapidas .c3{
+    background-color:  #876445;
+}
+#footer a {
+    color: #c3a585;
+}

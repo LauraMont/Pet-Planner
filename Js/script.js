@@ -1,4 +1,11 @@
+
 /*
+    En el proyecto se van a implementar las siguientes pesatañas:
+    -Index : Se vera cards de nuestras mascotas con parte de su informacion (Imagen, nombre, edad, raza)
+    -Mascotas : Se vera el perfil ccompleto de todas las mascotas , ademas se podra agregar una nueva mascota
+    -Perfil: Informacion del usuario,, podra cambiar su nombre y contraseña
+*/
+/*    
     Iniciar sesion primero
     Menu de vista rapida con 4 opciones
     1:Ver perfil medico de  mi mascota (Perfil consiste en peso , vacunas, bitacora de visitas al veterinario, nombre, raza, edad)
@@ -99,7 +106,7 @@ function elegirMascota(Mascotas){
         index++;
         texto += index + ":" + element.nombre + "\n";
     });
-    return parseInt(prompt("Ingrese el indice de la mascota deseada\n" + texto));
+    return parseInt(prompt("Ingrese el indice de la mascota deseada\n" + texto))-1;
 
 }
 
@@ -111,6 +118,49 @@ function imprimirTexto(texto){
         alert("No hay nada escrito en las notas rapidas.");
     }
 }
+
+function agregarCardMascota(mascota){
+        let contenedor = document.createElement("div");
+        //Definimos el innerHTML del elemento con una plantilla de texto
+        contenedor.innerHTML = `<img src="..." class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title nombre">${mascota.nombre}</h5>
+                                    <p>
+                                        Raza: ${mascota.raza}
+                                        <br>Edad: ${mascota.edad}
+                                        <br>Peso: ${mascota.peso}
+                                    </p>
+                                </div>`;
+        contenedor.className = "card bg-petcard";
+        document.getElementById("petCards").appendChild(contenedor);
+}
+//Copia la informacion en cada card correspondiente al orden alfabetico 
+//y agrega una con el ultimo elemento que se ingreso
+function asignarPetCards(mascotas){
+    let nombre = document.querySelectorAll("#petCards .bg-petcard h5");
+    let datos = document.querySelectorAll("#petCards .bg-petcard p");
+    let i;
+    for (i = 0 ; i < nombre.length; i++) {
+        nombre[i].innerText = mascotas[i].nombre;
+        datos[i].innerHTML = `<img src="..." class="card-img-top" alt="...">
+                            Raza: ${mascotas[i].raza}
+                            <br>Edad: ${mascotas[i].edad}
+                            <br>Peso: ${mascotas[i].peso}`;
+    }
+    console.log(i);
+    agregarCardMascota(mascotas[i]);
+}
+function agregarCardNota(nuevaNota){
+    let contenedor = document.createElement("div");
+    //Definimos el innerHTML del elemento con una plantilla de texto
+    contenedor.innerHTML = `<img src="..." class="card-img-top" alt="...">
+                            <div class="card-header">Nota 1</div>
+                            <div class="card-body">
+                                <p class="card-text">${nuevaNota}</p>
+                            </div>`;
+    contenedor.className = "card text-dark c2 mb-3";
+    document.getElementById("NotasRapidas").appendChild(contenedor);
+}
 /* Fin de Funciones */
 /* Variables */
 let opcion = '1';
@@ -118,28 +168,29 @@ let notaRapida = [];
 let usuario = new Usuario ("LauraMontaño" , "Laura1234");
 let mascotas = [new Mascota("Sasha", "especie", 5, 10, "golden")];
 /* Fin de Variables */
-for(let i = 5; i>0 ; i--){
     let user = prompt("Ingrese usuario: ");
     let psw = prompt("Ingrese contraseña: ");
 
     if((user === usuario.user) && (psw === usuario.password)){
+        //Cambiar titulo principal del index
+        let titulo = document.getElementById("tituloPrincipal");
+        titulo.innerText = "Bienvenido/a "+usuario.user;
+        agregarCardMascota(mascotas[0]);
         while(opcion !== '0'){
-            opcion = prompt("Ingrese opcion deseada: \n1:Ver perfil medico de mis mascotas \n2:Hacer una nota rapida \n3:Editar perfil medico \n4:Ver mis notas rapidas \n5:Agregar nueva mascota\n6:Editar Informacion del usuarion\n0:Salir  ");
+            opcion = prompt("Ingrese opcion deseada: \n1:Hacer una nota rapida \n2:Editar perfil medico \n3:Agregar nueva mascota\n4:Editar Informacion del usuarion\n0:Salir  ");
             switch(opcion){
                 case('0'):console.log("Usuario cerro sesión");
                     break;
-                case('1'):mascotas.forEach(element => {element.MostrarPerfil();});
+                case('1'):let nuevaNota =prompt("Ingrese nota rapida: ");
+                    notaRapida.push(nuevaNota);
+                    agregarCardNota(nuevaNota);
                     break;
-                case('2'):notaRapida.push(prompt("Ingrese nota rapida: "));
-                    break;
-                case('3'):
+                case('2'):
                     let indice = elegirMascota(mascotas);
                     let _opcion = prompt("Ingrese una opcion: \n1:Editar nombre.\n2:Editar raza.\n3:Editar edad.\n4:Editar peso.\n5:Editar bitacora.\n6:Editar vacunas.\n7:Editar especie");
                     mascotas[indice].CambiarDato(_opcion);
                     break;
-                case('4'):imprimirTexto(notaRapida);
-                    break;
-                case('5'):mascotas.push(agregarMascota()) ;
+                case('3'):mascotas.push(agregarMascota()) ;
                     mascotas.sort((a, b) => {//Ordena por orden alfabetico la lista de mascotas
                         if (a.nombre.toUpperCase() > b.nombre.toUpperCase()) {
                             return 1;
@@ -149,18 +200,16 @@ for(let i = 5; i>0 ; i--){
                         }
                         // a es igual a b
                         return 0;
-                    }) 
+                    })
+                    asignarPetCards(mascotas);
                     break;
-                case('6'):let op = prompt("Ingrese opcion: \n1:Cambiar nombre.\n2:Cambiar contraseña");
+                case('4'):let op = prompt("Ingrese opcion: \n1:Cambiar nombre.\n2:Cambiar contraseña");
                     usuario.cambiarDatos(op);
                     break;
                 default: alert("Opcion Invalida.");
                     break;
             }
         }
-        break;
     }else{
-        alert("Usuario o contraseña invalidos, por favor intente de nuevo.Tiene "+(i-1)+ " intentos mas.");
+        alert("Usuario o contraseña invalidos, por favor intente de nuevo.");
     }
-    
-}
