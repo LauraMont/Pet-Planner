@@ -1,10 +1,15 @@
 #petCards .card,
 .bg-petcard{
     margin-top: 4rem;
-    width: 18rem;
+    width: 15rem;
     background-color: #CA955C;
 }
-
+.d-view{
+    text-decoration: none;
+}
+.dNone{
+    display: none;
+}
 body,
 #NotasRapidas .c2{
     background-color: rgb(237, 223, 179);
@@ -14,7 +19,8 @@ body,
 #perfilUsuario{
     background-color: #76BA99;
 }
-#perfilUsuario .card{
+#perfilUsuario .card,
+#inicioSesionCard{
     border: none;
     background-color:#76BA99;
 }

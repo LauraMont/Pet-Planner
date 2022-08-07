@@ -5,18 +5,7 @@
     -Mascotas : Se vera el perfil ccompleto de todas las mascotas , ademas se podra agregar una nueva mascota
     -Perfil: Informacion del usuario,, podra cambiar su nombre y contraseña
 */
-/*    
-    Iniciar sesion primero
-    Menu de vista rapida con 4 opciones
-    1:Ver perfil medico de  mi mascota (Perfil consiste en peso , vacunas, bitacora de visitas al veterinario, nombre, raza, edad)
-    2:Hacer una nota rapida (Por ahora solo se puede escribir solo 1,por lo tato se sobreescribe la anterior)
-    3:Editar perfil medico 
-    4.Ver mis notas rapidas   
-    5:Agregar mascota
-    6.Editar datos del usuario
-    0:Salir
-    Otro valor: vuelve a preguntar
-*/
+
 /* Clases */
 class Usuario{
     constructor(user ,psw){
@@ -44,7 +33,7 @@ class Usuario{
     }
 }
 class Mascota{
-    constructor(nombre, especie, edad, peso, raza, vacunas, bitacora){
+    constructor(nombre, especie, edad, peso, raza,imagen,vacunas,bitacora ){
         this.nombre = nombre;
         this.especie = especie;
         this.edad = edad;
@@ -52,6 +41,7 @@ class Mascota{
         this.raza = "none";
         this.bitacora = [];
         this.vacunas = [];
+        this.imagen = imagen;
 
         if(raza != undefined){
             this.raza = raza;
@@ -98,118 +88,158 @@ function agregarMascota() {
     const peso = prompt("Ingresar peso: ");
     return new Mascota(nombre, especie, edad, peso, raza);
 }
-
-function elegirMascota(Mascotas){
-    let texto = " ";
-    let index = 0;
-    Mascotas.forEach(element => {
-        index++;
-        texto += index + ":" + element.nombre + "\n";
-    });
-    return parseInt(prompt("Ingrese el indice de la mascota deseada\n" + texto))-1;
-
+function agregarCardMascotaIndex(mascota){
+    let contenedor = document.createElement("div");
+    //Agregamos card al index
+    contenedor.innerHTML = `<img src="${mascota.imagen}" class="card-img-top w-50" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title nombre">${mascota.nombre}</h5>
+                                <p>
+                                    Raza: ${mascota.raza}
+                                    <br>Edad: ${mascota.edad}
+                                    <br>Peso: ${mascota.peso}
+                                </p>
+                            </div>`;
+    contenedor.className = "d-flex flex-column align-items-center card bg-petcard pt-3";
+    document.getElementById("petCards").appendChild(contenedor);
 }
 
-function imprimirTexto(texto){
-    if(texto.length>=1){
-        alert(texto.join('\n'));
-    }
-    else{
-        alert("No hay nada escrito en las notas rapidas.");
-    }
-}
-
-function agregarCardMascota(mascota){
-        let contenedor = document.createElement("div");
-        //Definimos el innerHTML del elemento con una plantilla de texto
-        contenedor.innerHTML = `<img src="..." class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title nombre">${mascota.nombre}</h5>
-                                    <p>
-                                        Raza: ${mascota.raza}
-                                        <br>Edad: ${mascota.edad}
-                                        <br>Peso: ${mascota.peso}
-                                    </p>
-                                </div>`;
-        contenedor.className = "card bg-petcard";
-        document.getElementById("petCards").appendChild(contenedor);
+function agregarCardMascotaMisMascotas(mascota){
+    let contenedor = document.createElement("div");
+    //Agregamos perfil a la pagina de mascotas
+    contenedor.innerHTML = `<div class="card mb-3" >
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img src="${mascota.imagen}" class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">${mascota.nombre}</h5>
+                <p class="card-text">
+                    Edad: ${mascota.edad}
+                    <br>Especie: ${mascota.especie}
+                    <br>Raza: ${mascota.raza}
+                    <br>Bitacora: ${mascota.bitacora}
+                    <br>Vacunas: ${mascota.vacunas}
+                </p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+        </div>
+    </div>
+</div>`;
+contenedor.className = "d-flex flex-column align-items-center card bg-petcard pt-3";
+document.getElementById("listaMascotas").appendChild(contenedor);
 }
 //Copia la informacion en cada card correspondiente al orden alfabetico 
 //y agrega una con el ultimo elemento que se ingreso
-function asignarPetCards(mascotas){
+function asignarPetCardsIndex(mascotas){
     let nombre = document.querySelectorAll("#petCards .bg-petcard h5");
     let datos = document.querySelectorAll("#petCards .bg-petcard p");
-    let i;
-    for (i = 0 ; i < nombre.length; i++) {
+    let i = 0;
+    if(mascotas.length>1){
+        for (i = 0 ; i < nombre.length; i++) {
+        nombre[i].innerText = mascotas[i].nombre;
+        datos[i].innerHTML = `Edad: ${mascota.edad}
+                            <br>Especie: ${mascota.especie}
+                            <br>Raza: ${mascota.raza}
+                            <br>Bitacora: ${mascota.bitacora}
+                            <br>Vacunas: ${mascota.vacunas}`;
+        }
+    }
+    agregarCardMascotaIndex(mascotas[i]);
+    guardarMascotas(mascotas);
+}
+//Copia la informacion en cada card correspondiente al orden alfabetico 
+//y agrega una con el ultimo elemento que se ingreso
+function asignarPetCardsMascotas(mascotas){
+    let nombre = document.querySelectorAll("#petCards .bg-petcard h5");
+    let datos = document.querySelectorAll("#petCards .bg-petcard p");
+    let i = 0;
+    if(mascotas.length>1){
+        for (i = 0 ; i < nombre.length; i++) {
         nombre[i].innerText = mascotas[i].nombre;
         datos[i].innerHTML = `<img src="..." class="card-img-top" alt="...">
                             Raza: ${mascotas[i].raza}
                             <br>Edad: ${mascotas[i].edad}
                             <br>Peso: ${mascotas[i].peso}`;
+        }
     }
-    console.log(i);
-    agregarCardMascota(mascotas[i]);
+    agregarCardMascotaMisMascotas(mascotas[i]);
+    guardarMascotas(mascotas);
 }
-function agregarCardNota(nuevaNota){
-    let contenedor = document.createElement("div");
-    //Definimos el innerHTML del elemento con una plantilla de texto
-    contenedor.innerHTML = `<img src="..." class="card-img-top" alt="...">
-                            <div class="card-header">Nota 1</div>
-                            <div class="card-body">
-                                <p class="card-text">${nuevaNota}</p>
-                            </div>`;
-    contenedor.className = "card text-dark c2 mb-3";
-    document.getElementById("NotasRapidas").appendChild(contenedor);
+//Agrega una nota al final de la lista
+function agregarCardNota(notas){
+    notas.forEach(element => {
+        let contenedor = document.createElement("div");
+        //Definimos el innerHTML del elemento con una plantilla de texto
+        contenedor.innerHTML = `<div class="card-header">Fecha: dd/mm/aa </div>
+                                <div class="card-body">
+                                    <p class="card-text">${element}</p>
+                                </div>`;
+        contenedor.className = "card text-dark c2 mb-3";
+        document.getElementById("NotasRapidas").appendChild(contenedor);
+    });
+    
+}
+//Guardar datos en el storage 
+function guardarDatosUsuario(usuario){
+    localStorage.setItem('usuario', JSON.stringify(usuario));
+}
+function guardarMascotas(mascotas){
+    localStorage.setItem('mascotas', JSON.stringify(mascotas));
+}
+function guardarNotasRapidas(notaRapida){
+    localStorage.setItem('notaRapida', JSON.stringify(notaRapida));
+}
+//Oculta el login y hace visible el home del usuario
+function IniciarSesion(mascotas, notas){
+    home = document.querySelectorAll('.d-none');
+    login = document.querySelectorAll('.d-view');
+
+    home.forEach(element => {
+        element.classList.replace('d-none','d-view');
+    });
+    login.forEach(element => {
+        element.classList.replace('d-view','d-none');
+    });
+    asignarPetCardsIndex(mascotas);
+    agregarCardNota(notas);
+}
+
+//Recupero los datos que se guardaron y los retorno
+function recuperarUsuario() {
+    let user = JSON.parse(localStorage.getItem('usuario'));
+    return user;
 }
 /* Fin de Funciones */
 /* Variables */
-let opcion = '1';
-let notaRapida = [];
 let usuario = new Usuario ("LauraMontaño" , "Laura1234");
-let mascotas = [new Mascota("Sasha", "especie", 5, 10, "golden")];
-/* Fin de Variables */
-    let user = prompt("Ingrese usuario: ");
-    let psw = prompt("Ingrese contraseña: ");
+let mascotas = [new Mascota("Sasha", "especie", 5, 10, "golden","./img/perro.png")];
+let notaRapida = ["holaaa","byeee"];
 
-    if((user === usuario.user) && (psw === usuario.password)){
-        //Cambiar titulo principal del index
-        let titulo = document.getElementById("tituloPrincipal");
-        titulo.innerText = "Bienvenido/a "+usuario.user;
-        agregarCardMascota(mascotas[0]);
-        while(opcion !== '0'){
-            opcion = prompt("Ingrese opcion deseada: \n1:Hacer una nota rapida \n2:Editar perfil medico \n3:Agregar nueva mascota\n4:Editar Informacion del usuarion\n0:Salir  ");
-            switch(opcion){
-                case('0'):console.log("Usuario cerro sesión");
-                    break;
-                case('1'):let nuevaNota =prompt("Ingrese nota rapida: ");
-                    notaRapida.push(nuevaNota);
-                    agregarCardNota(nuevaNota);
-                    break;
-                case('2'):
-                    let indice = elegirMascota(mascotas);
-                    let _opcion = prompt("Ingrese una opcion: \n1:Editar nombre.\n2:Editar raza.\n3:Editar edad.\n4:Editar peso.\n5:Editar bitacora.\n6:Editar vacunas.\n7:Editar especie");
-                    mascotas[indice].CambiarDato(_opcion);
-                    break;
-                case('3'):mascotas.push(agregarMascota()) ;
-                    mascotas.sort((a, b) => {//Ordena por orden alfabetico la lista de mascotas
-                        if (a.nombre.toUpperCase() > b.nombre.toUpperCase()) {
-                            return 1;
-                        }
-                        if (a.nombre.toUpperCase() < b.nombre.toUpperCase()) {
-                            return -1;
-                        }
-                        // a es igual a b
-                        return 0;
-                    })
-                    asignarPetCards(mascotas);
-                    break;
-                case('4'):let op = prompt("Ingrese opcion: \n1:Cambiar nombre.\n2:Cambiar contraseña");
-                    usuario.cambiarDatos(op);
-                    break;
-                default: alert("Opcion Invalida.");
-                    break;
-            }
-        }
+localStorage.setItem('usuario',JSON.stringify(usuario));
+localStorage.setItem('mascotas',JSON.stringify(mascotas));
+localStorage.setItem('notaRapida',JSON.stringify(notaRapida));
+
+const pets = JSON.parse(localStorage.getItem('mascotas')),
+notes = JSON.parse(localStorage.getItem('notaRapida'));
+
+
+const ingresarBtn = document.getElementById('ingresarBtn'), 
+    misMascotasTab = document.getElementById('misMascotasTab'),
+    user = document.getElementById('user'),
+    psw = document.getElementById('Password');
+
+/* Eventos */
+ingresarBtn.addEventListener('click',()=>{
+    let usuario = recuperarUsuario();
+    if((user.value == usuario.user)&&(psw.value == usuario.password)){
+        IniciarSesion(pets ,notes);
     }else{
-        alert("Usuario o contraseña invalidos, por favor intente de nuevo.");
+        alert("Usuario y/o contraseña invalidos.");
     }
+});
+misMascotasTab.addEventListener('click',()=>{
+    console.log("hola");
+    asignarPetCardsMascotas(pets);
+});
