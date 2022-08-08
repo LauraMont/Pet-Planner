@@ -32,7 +32,7 @@
         </nav>
     </header>
     <main >
-        <section id="inicioSesion" class="d-flex justify-content-center align-content-center d-view">
+        <section id="inicioSesion" class="d-flex justify-content-center align-content-center d-view m-5">
             <div id="inicioSesionCard" class="d-flex flex-column p-5 align-items-center " style="width: 40vw;">
                 <div  class="form-floating mb-3 mb-2" >
                     <input type="text" class="form-control" id="user" placeholder="user">
@@ -49,9 +49,16 @@
         </section>
 
         <section id="home" class="d-none">
-            <h1 id="tituloPrincipal" class="text-center ">Bienvenido/a <i>usuario</i></h1>
+            <h1 id="tituloPrincipal" class="text-center "></h1>
         <div id="petCards" class="d-flex d-flex justify-content-evenly flex-wrap ">
         </div>
+        <div id="AgregarNota" class="d-flex justify-content-center mt-5">
+            <div class="input-group mb-3 w-50">
+            <button class="btn btn-outline-secondary" type="button" id="AgregarNotaBtn">Agregar nota</button>
+            <input type="text" id="AgregarNotaInp" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+        </div>
+        </div>
+        
         <div id="NotasRapidas" class="d-flex d-flex justify-content-evenly flex-wrap m-5 pb-5 pt-3 ">
             <h2 class="w-100 text-center p-2">Notas rapidas</h2>
         </div>
