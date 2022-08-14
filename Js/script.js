@@ -1,9 +1,9 @@
 
-/*
-    En el proyecto se van a implementar las siguientes pesatañas:
-    -Index : Se vera cards de nuestras mascotas con parte de su informacion (Imagen, nombre, edad, raza)
-    -Mascotas : Se vera el perfil ccompleto de todas las mascotas , ademas se podra agregar una nueva mascota
-    -Perfil: Informacion del usuario,, podra cambiar su nombre y contraseña
+/*Index:
+Inicio de sesion con solo un usuario 
+Se podra visualizar card de las mascotas con poca informacion y las notas rapidas 
+Se podran agregar las notas rapidas
+Queda pendiete la eliminacion de un nota rapida
 */
 
 /* Clases */
@@ -84,16 +84,29 @@ function agregarCardMascotaIndex(mascota){
 //Copia la informacion en cada card correspondiente al orden alfabetico 
 //y agrega una con el ultimo elemento que se ingreso
 function asignarPetCardsIndex(mascotas){
+    mascotas.sort((a, b) => {//Ordena por orden alfabetico la lista de mascotas
+        if (a.nombre.toUpperCase() > b.nombre.toUpperCase()) {
+            return 1;
+        }
+        if (a.nombre.toUpperCase() < b.nombre.toUpperCase()) {
+            return -1;
+        }
+        // a es igual a b
+        return 0;
+    }) 
     const lista = document.getElementById("petCards");
-    lista.innerHTML = '<h2 class="w-100 text-center p-2">Notas rapidas</h2>';
+    lista.innerHTML = ' ';
     mascotas.forEach(element => {
         agregarCardMascotaIndex(element);
     });
     guardarMascotas(mascotas);
 }
 //Agrega toda las cards de notas 
-function agregarCardNota(notas){
+function agregarCardNota(notas, nota){
     let listaNotas = document.getElementById('NotasRapidas');
+    if(nota!= undefined){
+        notas.push(nota); //Si hay una nota rapida , debe agregarse a las notas 
+    }
     listaNotas.innerHTML = ' ';
     notas.forEach(element => {
         let contenedor = document.createElement("div");
@@ -136,23 +149,30 @@ function IniciarSesion(mascotas, notas, nombre){
 //Recupero los datos que se guardaron y los retorno
 function recuperarUsuario() {
     let user = JSON.parse(localStorage.getItem('usuario'));
+    user & localStorage.setItem('usuario',JSON.stringify(usuario));
     return user;
 }
 /* Fin de Funciones */
+
 /* Variables para inicializar el storage*/
-/* let usuario = new Usuario ("LauraMontaño" , "Laura1234");
+let usuario = new Usuario ("LauraMontaño" , "Laura1234");
 let mascotas = [new Mascota("Sasha", "perro", 5, 10, "golden","./img/perro.png"),
                 new Mascota("Manolo", "gato", 12, 4.5, "none","./img/gato.png"),
                 new Mascota("Windy", "gato", 8, 4, "none","./img/gato.png")];
 let notaRapida = ["Bañar a sasha mañana!"]; 
-
-localStorage.setItem('usuario',JSON.stringify(usuario));
-localStorage.setItem('mascotas',JSON.stringify(mascotas));
+/* localStorage.setItem('mascotas',JSON.stringify(mascotas));
 localStorage.setItem('notaRapida',JSON.stringify(notaRapida)); */
+
 
 /* Variables con informacion del local storage */
 const pets = JSON.parse(localStorage.getItem('mascotas')),
-            notes = JSON.parse(localStorage.getItem('notaRapida'));
+        notes = JSON.parse(localStorage.getItem('notaRapida'));
+    //Inicializacion de valores en storage en caso de no tener
+    pets & localStorage.setItem('mascotas',JSON.stringify(mascotas));
+    notes & localStorage.setItem('notaRapida',JSON.stringify(notaRapida));
+    
+    console.log(pets);
+    console.log(notes);
 /* Variables del DOM */
 const ingresarBtn = document.getElementById('ingresarBtn'), 
     misMascotasTab = document.getElementById('misMascotasTab'),
@@ -160,20 +180,17 @@ const ingresarBtn = document.getElementById('ingresarBtn'),
     psw = document.getElementById('Password'),
     AgregarNotaBtn = document.getElementById('AgregarNotaBtn'),
     AgregarNotaInp = document.getElementById('AgregarNotaInp');
-
+    
+    
 /* Eventos */
 ingresarBtn.addEventListener('click',()=>{
     let usuario = recuperarUsuario();
-    if((user.value == usuario.user)&&(psw.value == usuario.password)){
-        IniciarSesion(pets ,notes, usuario.user);
-    }else{
-        alert("Usuario y/o contraseña invalidos.");
-    }
+    (user.value == usuario.user)&&(psw.value == usuario.password)? 
+    IniciarSesion(pets ,notes, usuario.user) : alert("Usuario y/o contraseña invalidos.");
 });
 
 AgregarNotaBtn.addEventListener('click', ()=>{
-    notes.push(AgregarNotaInp.value);
-    agregarCardNota(notes);
-    
+    AgregarNotaInp.value!=''? 
+    agregarCardNota(notes, AgregarNotaInp.value) : alert("La nota debe tener el menos un caracter");
 })
 
