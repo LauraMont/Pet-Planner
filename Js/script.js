@@ -56,15 +56,6 @@ class Mascota{
 }
 /* Fin de clases */
 /* Funciones */
-/* --- Instanciar objeto con una función ---Creditos a la tutora Daniela <3 */
-function agregarMascota() {
-    const nombre = prompt("Ingresa el nombre:");
-    const especie = prompt("Ingresar especie:");
-    const raza = prompt("Ingresar raza (si es desconocida ingrese none):");
-    const edad = prompt("Ingresar edad:");
-    const peso = prompt("Ingresar peso: ");
-    return new Mascota(nombre, especie, edad, peso, raza);
-}
 //Agrega una card mascota al final de la lista
 function agregarCardMascotaIndex(mascota){
     let contenedor = document.createElement("div");
@@ -78,7 +69,7 @@ function agregarCardMascotaIndex(mascota){
                                     <br>Peso: ${mascota.peso}
                                 </p>
                             </div>`;
-    contenedor.className = "d-flex flex-column align-items-center card bg-petcard pt-3";
+    contenedor.className = "d-flex flex-column align-items-center card bg-petcard pt-3 mx-3";
     document.getElementById("petCards").appendChild(contenedor);
 }
 //Copia la informacion en cada card correspondiente al orden alfabetico 
@@ -104,6 +95,7 @@ function asignarPetCardsIndex(mascotas){
 //Agrega toda las cards de notas 
 function agregarCardNota(notas, nota){
     let listaNotas = document.getElementById('NotasRapidas');
+    let id = 0;
     if(nota!= undefined){
         notas.push(nota); //Si hay una nota rapida , debe agregarse a las notas 
     }
@@ -111,14 +103,21 @@ function agregarCardNota(notas, nota){
     notas.forEach(element => {
         let contenedor = document.createElement("div");
         //Definimos el innerHTML del elemento con una plantilla de texto
-        contenedor.innerHTML = `<div class="card-header">Fecha: dd/mm/aa </div>
-                                <div class="card-body">
+        contenedor.innerHTML = `<div  class="card-header">
+                                    Fecha: dd/mm/aa 
+                                    <a id="${id}" class="btn btn_trash">
+                                        <img src="./img/trash.png" alt="">                             
+                                    </a>
+                                </div>
+                                <div  class="card-body">
                                     <p class="card-text">${element}</p>
                                 </div>`;
         contenedor.className = "card text-dark c2 mb-3";
         document.getElementById("NotasRapidas").appendChild(contenedor);
+        id ++;
     });
     guardarNotasRapidas(notas)
+    actulizarBtsTrash();
 }
 //Guardar datos en el storage 
 function guardarDatosUsuario(usuario){
@@ -145,12 +144,44 @@ function IniciarSesion(mascotas, notas, nombre){
     });
     asignarPetCardsIndex(mascotas);
     agregarCardNota(notas);
+    actulizarBtsTrash();
 }
 //Recupero los datos que se guardaron y los retorno
 function recuperarUsuario() {
     let user = JSON.parse(localStorage.getItem('usuario'));
     user & localStorage.setItem('usuario',JSON.stringify(usuario));
     return user;
+}
+//Agrega event a cada boton de las cards
+function actulizarBtsTrash(){
+    const BtnTrashNote = document.querySelectorAll(".btn_trash");
+    BtnTrashNote.forEach(note => {
+        note.addEventListener('click', () => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )                    
+                    let index = note.id;
+                    console.log(index);
+                    notes.splice(index, 1);
+                    guardarNotasRapidas(notes);
+                    agregarCardNota(notes)
+                }
+            })
+        }
+        );
+    });
 }
 /* Fin de Funciones */
 
@@ -160,51 +191,62 @@ let mascotas = [new Mascota("Sasha", "perro", 5, 10, "golden","./img/perro.png")
                 new Mascota("Manolo", "gato", 12, 4.5, "none","./img/gato.png"),
                 new Mascota("Windy", "gato", 8, 4, "none","./img/gato.png")];
 let notaRapida = ["Bañar a sasha mañana!"]; 
-/* localStorage.setItem('mascotas',JSON.stringify(mascotas));
-localStorage.setItem('notaRapida',JSON.stringify(notaRapida)); */
-
+let estadoSesion = false;
 
 /* Variables con informacion del local storage */
 const pets = JSON.parse(localStorage.getItem('mascotas')),
-        notes = JSON.parse(localStorage.getItem('notaRapida'));
+    notes = JSON.parse(localStorage.getItem('notaRapida')),
+    sesion = JSON.parse(localStorage.getItem('estadoSesion'));
     //Inicializacion de valores en storage en caso de no tener
     pets & localStorage.setItem('mascotas',JSON.stringify(mascotas));
     notes & localStorage.setItem('notaRapida',JSON.stringify(notaRapida));
-    
-    console.log(pets);
-    console.log(notes);
+    sesion & localStorage.setItem('estadoSesion',JSON.stringify(estadoSesion));
 /* Variables del DOM */
 const ingresarBtn = document.getElementById('ingresarBtn'), 
     misMascotasTab = document.getElementById('misMascotasTab'),
     user = document.getElementById('user'),
     psw = document.getElementById('Password'),
     AgregarNotaBtn = document.getElementById('AgregarNotaBtn'),
-    AgregarNotaInp = document.getElementById('AgregarNotaInp');
-    
-    
+    AgregarNotaInp = document.getElementById('AgregarNotaInp'),
+    BtnTrashNote = document.querySelectorAll(".btn_trash");
+
 /* Eventos */
-ingresarBtn.addEventListener('click',()=>{
-    let usuario = recuperarUsuario();
-    (user.value == usuario.user)&&(psw.value == usuario.password)? 
-    IniciarSesion(pets ,notes, usuario.user) : alert("Usuario y/o contraseña invalidos.");
-});
-
-AgregarNotaBtn.addEventListener('click', ()=>{
-    AgregarNotaInp.value!=''? 
-    agregarCardNota(notes, AgregarNotaInp.value) : alert("La nota debe tener el menos un caracter");
+if (ingresarBtn && !estadoSesion){
+    ingresarBtn.addEventListener('click',(e)=>{
     
-})
-Toastify({
-    text: "Nota agregada",
-    duration: 3000,
-    newWindow: true,
-    close: true,
-    gravity: "top", // `top` or `bottom`
-    position: "left", // `left`, `center` or `right`
-    stopOnFocus: true, // Prevents dismissing of toast on hover
-    style: {
-        background: "linear-gradient(to right, #00b09b, #96c93d)",
-    },
-}).showToast();
+        let usuario = recuperarUsuario();
+        (user.value == usuario.user)&&(psw.value == usuario.password)? 
+        IniciarSesion(pets ,notes, usuario.user) : Swal.fire('Login','Usuario y/o contraseña invalidos.','error');
+        e.preventDefault();
+    });
+}
 
-Swal.fire('Hola','Esto es un alert','info')
+if(AgregarNotaBtn){
+    AgregarNotaBtn.addEventListener('click', ()=>{
+    if (AgregarNotaInp.value!=''){
+        agregarCardNota(notes, AgregarNotaInp.value) ;
+        Toastify({
+            text: "Nota agregada",
+            duration: 3000,
+            newWindow: true,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+                background: "linear-gradient(to right, #76BA99, #76BA99)", 
+                color: "black",
+                border: "solid 1px grey",
+            },
+        }).showToast();
+        actulizarBtsTrash()
+    }else{
+        Swal.fire('Descripcion de Nota Rapida','La Descripcion debe tener el menos un caracter','warning');
+    }
+})
+}
+
+console.log("1231321");
+
+
+
+

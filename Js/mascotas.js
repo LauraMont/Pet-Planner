@@ -32,17 +32,14 @@ class Mascota{
     }
 }
 /* Funciones */
-function agregarCardMascotaMisMascotas(mascota){
+function agregarCardMascota(mascota){
     let contenedor = document.createElement("div");
-/*     if(mascota.imagen == undefined)
-        {
-            mascota.imagen = ' ';
-        } */
     //Agregamos perfil a la pagina de mascotas
     contenedor.innerHTML = `<div class="row g-0 d-flex flex-column align-items-center">
                                 <div class="col-md-4">
                                     <img src="${mascota.imagen}" class="img-fluid rounded-start" alt="...">
                                 </div>
+
                                 <div class="col-md-8">
                                     <div class="card-body">
                                         <h5 class="card-title">${mascota.nombre}</h5>
@@ -56,8 +53,11 @@ function agregarCardMascotaMisMascotas(mascota){
                                         <p class="card-text text-white mb-1"><small class="text-white">Last updated 3 mins ago</small></p>
                                     </div>
                                 </div>
+                                <a class="btn btn_trash">
+                                            <img src="./img/trash.png" alt="">                             
+                                </a>
                             </div>`;
-contenedor.className = "card mb-3  card bg-petcard pt-3";
+contenedor.className = "card mb-3  card bg-petcard pt-3 mx-3";
 document.getElementById("listaMascotas").appendChild(contenedor);
 }
 
@@ -67,7 +67,7 @@ function asignarPetCardsMascotas(mascotas){
     const lista = document.getElementById("listaMascotas");
     lista.innerHTML = ' ';
     mascotas.forEach(element => {
-        agregarCardMascotaMisMascotas(element);
+        agregarCardMascota(element);
         console.log(element.imagen);
     });
     guardarMascotas(mascotas);
@@ -76,10 +76,36 @@ function asignarPetCardsMascotas(mascotas){
 function guardarMascotas(mascotas){
     localStorage.setItem('mascotas', JSON.stringify(mascotas));
 }
-/* Inicializar variables en el storage */
-let mascotas = [new Mascota("Sasha", "perro", 5, 10, "golden","./img/perro.png"),
-                new Mascota("Manolo", "gato", 12, 4.5, "none","./img/gato.png"),
-                new Mascota("Windy", "gato", 8, 4, "none","./img/gato.png")];
+//Agrega event a cada boton de las cards
+function actulizarBtnpet(){
+    const BtnTrashPet = document.querySelectorAll(".btn_trash");
+    BtnTrashPet.forEach((mascota,index) => {
+        mascota.addEventListener('click', () => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )                    
+                    console.log(index);
+                    pets.splice(index, 1);
+                    asignarPetCardsMascotas(pets);
+                    guardarMascotas(pets);
+                }
+            })
+        }
+        );
+    });
+}
 
 /* Variables de DOM y storage*/
 const pets = JSON.parse(localStorage.getItem('mascotas'));
@@ -89,8 +115,8 @@ AgregarBtn = document.getElementById('AgregarBtn') ,
             Edad = document.getElementById('Edad'),
             Raza = document.getElementById('Raza'),
             Peso = document.getElementById('Peso'),
-            Imagen = document.getElementById('imagen');
-
+            Imagen = document.getElementById('animales');
+console.log("1231321");
 /* Eventos */
 AgregarBtn.addEventListener('click', ()=>{
     if(Nombre.value && Nombre.value!=" "){
@@ -106,14 +132,16 @@ AgregarBtn.addEventListener('click', ()=>{
             return 0;
         }) 
     asignarPetCardsMascotas(pets) ;
+    actulizarBtnpet();
     }else{
-        alert("El campo nombre es obligatorio");    
+        Swal.fire('Nombre de mascota','El campo nombre es obligatorio','error');
     }
 })
 
 window.onload = ()=>{
-    pets & localStorage.setItem('mascotas',JSON.stringify(mascotas)); 
     asignarPetCardsMascotas(pets);
+    actulizarBtnpet();
+
 }
 
 
