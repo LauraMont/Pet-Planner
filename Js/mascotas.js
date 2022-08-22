@@ -39,7 +39,6 @@ function agregarCardMascota(mascota){
                                 <div class="col-md-4">
                                     <img src="${mascota.imagen}" class="img-fluid rounded-start" alt="...">
                                 </div>
-
                                 <div class="col-md-8">
                                     <div class="card-body">
                                         <h5 class="card-title">${mascota.nombre}</h5>
@@ -53,9 +52,15 @@ function agregarCardMascota(mascota){
                                         <p class="card-text text-white mb-1"><small class="text-white">Last updated 3 mins ago</small></p>
                                     </div>
                                 </div>
-                                <a class="btn btn_trash">
-                                            <img src="./img/trash.png" alt="">                             
-                                </a>
+                                <div class="col-md-8 d-flex justify-content-evenly mb-3">
+                                    <a class="btn btn_trash">
+                                        <img src="./img/trash.png" alt="">                             
+                                    </a>
+                                    <a class="btn btn_edit">
+                                        <img src="./img/editar-texto.png" alt="">                             
+                                    </a>
+                                </div>
+                                
                             </div>`;
 contenedor.className = "card mb-3  card bg-petcard pt-3 mx-3";
 document.getElementById("listaMascotas").appendChild(contenedor);
@@ -68,7 +73,6 @@ function asignarPetCardsMascotas(mascotas){
     lista.innerHTML = ' ';
     mascotas.forEach(element => {
         agregarCardMascota(element);
-        console.log(element.imagen);
     });
     guardarMascotas(mascotas);
 }
@@ -76,7 +80,7 @@ function asignarPetCardsMascotas(mascotas){
 function guardarMascotas(mascotas){
     localStorage.setItem('mascotas', JSON.stringify(mascotas));
 }
-//Agrega event a cada boton de las cards
+//Agrega event a cada boton-trash de las cards
 function actulizarBtnpet(){
     const BtnTrashPet = document.querySelectorAll(".btn_trash");
     BtnTrashPet.forEach((mascota,index) => {
@@ -106,7 +110,47 @@ function actulizarBtnpet(){
         );
     });
 }
-
+//Agrega event a cada boton-edit de las cards
+function actulizarEditpet(){
+    const BtnEditPet = document.querySelectorAll(".btn_edit");
+    BtnEditPet.forEach((mascota,index) => {
+        mascota.addEventListener('click', () => {
+            const { value: dato } =  Swal.fire({
+                title: 'Selecciona el dato que quieres cambiar',
+                input: 'select',
+                inputOptions: {
+                    'nombre': 'Nombre',
+                    'especie': 'Especie',
+                    'edad': 'Edad',
+                    'peso': 'Peso',
+                    'raza': 'Raza',
+                    'imagen': 'Imagen',
+                    'vacunas': 'Vacunas',
+                    'bitacora': 'Bitacora',
+                },
+                inputPlaceholder: 'Selecciona un dato',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    return new Promise((resolve) => {
+                        if (value ) {
+                            const { value: data } =  Swal.fire({
+                                title: `Ingresar nueva informacion(${value}) `,
+                                input: 'text',
+                                inputPlaceholder: 'Ingresa nuevo dato',
+                                inputAttributes: {
+                                    maxlength: 50,
+                                    autocapitalize: 'off',
+                                    autocorrect: 'off'
+                                }
+                            }) 
+                        }
+                    })
+                }
+            })
+        }
+        );
+    });
+}
 /* Variables de DOM y storage*/
 const pets = JSON.parse(localStorage.getItem('mascotas'));
 AgregarBtn = document.getElementById('AgregarBtn') ,
@@ -116,7 +160,6 @@ AgregarBtn = document.getElementById('AgregarBtn') ,
             Raza = document.getElementById('Raza'),
             Peso = document.getElementById('Peso'),
             Imagen = document.getElementById('animales');
-console.log("1231321");
 /* Eventos */
 AgregarBtn.addEventListener('click', ()=>{
     if(Nombre.value && Nombre.value!=" "){
@@ -133,6 +176,7 @@ AgregarBtn.addEventListener('click', ()=>{
         }) 
     asignarPetCardsMascotas(pets) ;
     actulizarBtnpet();
+    actulizarEditpet();
     }else{
         Swal.fire('Nombre de mascota','El campo nombre es obligatorio','error');
     }
@@ -141,7 +185,6 @@ AgregarBtn.addEventListener('click', ()=>{
 window.onload = ()=>{
     asignarPetCardsMascotas(pets);
     actulizarBtnpet();
+    actulizarEditpet()
 
 }
-
-
