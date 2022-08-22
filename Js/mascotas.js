@@ -151,8 +151,16 @@ function actulizarEditpet(){
         );
     });
 }
+function BtnCerrarSesion(btnLogOut ,sesion) {
+    btnLogOut.addEventListener('click', () => {
+        localStorage.setItem('sesionActiva', false);
+        sesion = JSON.parse(localStorage.getItem('sesionActiva'))
+        console.log(sesion)
+        LogOut();
+    });
+}
 /* Variables de DOM y storage*/
-const pets = JSON.parse(localStorage.getItem('mascotas'));
+const pets = JSON.parse(localStorage.getItem('mascotas')),
 AgregarBtn = document.getElementById('AgregarBtn') ,
             Nombre = document.getElementById('Nombre'),
             Especie = document.getElementById('Especie'),
@@ -160,6 +168,7 @@ AgregarBtn = document.getElementById('AgregarBtn') ,
             Raza = document.getElementById('Raza'),
             Peso = document.getElementById('Peso'),
             Imagen = document.getElementById('animales');
+let sesion = JSON.parse(localStorage.getItem('sesionActiva'));
 /* Eventos */
 AgregarBtn.addEventListener('click', ()=>{
     if(Nombre.value && Nombre.value!=" "){
@@ -186,5 +195,6 @@ window.onload = ()=>{
     asignarPetCardsMascotas(pets);
     actulizarBtnpet();
     actulizarEditpet()
-
+    btnLogOut = document.querySelector('#LogOut a');
+    BtnCerrarSesion(btnLogOut ,sesion);
 }

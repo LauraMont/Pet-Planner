@@ -16,30 +16,41 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="nav-link" href="./mascotas.html">Mis mascotas</a>
-                        <a class="nav-link" href="./perfil.html">Perfil</a>
-                    </div>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="./mascotas.html">Mis mascotas</a>
+                    <a class="nav-link" href="./perfil.html">Perfil</a>
                 </div>
             </div>
-            <div >
+            <div id="LogOut">
                 <a class="navbar-brand" href="./index.html">Log Out</a>
+            </div>
             </div>
         </nav>
     </header>
     <main class="m-5 px-5">
         <div id="perfilUsuario" class="m-5 p-2">
-            <h2 class="text-center mb-3">Perfil de <i>usuario</i></h2>
-            <div class="card mb-3 mx-5" >
+            <div class="card my-3 mx-5" >
                 <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="..." class="img-fluid rounded-start" alt="...">
+                    <div class="col-3 d-flex flex-column align-items-center">
+                        <img id="Avatar" src="./img/anonimo.png" class="img-fluid rounded-start" alt="avatar">
+                            <label for="avatar">Tipo de avatar</label>
+                            <select name="avatar" id="selectAvatar">
+                                <option value="./img/anonimo.png">anonimo</option>
+                                <option value="./img/p1.png">avatar1</option>
+                                <option value="./img/p2.png">avatar2</option>
+                                <option value="./img/p3.png">avatar3</option>
+                                <option value="./img/p4.png">avatar4</option>
+                                <option value="./img/p5.png">avatar5</option>
+                                <option value="./img/p6.png">avatar6</option>
+                                <option value="./img/p7.png">avatar7</option>
+                            </select>
                     </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">usuario</h5>
-                            <p class="card-text">Contraseña: </p>
+                    <div class="col ">
+                        <div class="card-body pt-0">
+                            <h2 class="text-center mb-3">Perfil de <i>usuario</i></h2>
+                            <h5 class="card-title">Usuario: </h5>
+                            <p class="card-text psw">Contraseña: </p>
                             <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                         </div>
                     </div>
@@ -50,28 +61,28 @@
             <div id="cambiarPsw" class="col-6 px-5">
                 <h3 class="text-center">Cambiar contraseña</h3>
                 <div class="form-floating mb-3 mb-2 ">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Anterior contraseña</label>
+                    <input type="password" class="form-control" id="anteriorPsw" placeholder="Anterior contraseña">
+                    <label for="anteriorPsw">Anterior contraseña</label>
                 </div>
                 <div class="form-floating mb-3 mb-2">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Nueva cotraseña</label>
+                    <input type="password" class="form-control" id="nuevaPsw" placeholder="Nueva cotraseña">
+                    <label for="nuevaPsw">Nueva cotraseña</label>
                 </div>
                 <div class="col-12 d-flex justify-content-center m-3">
-                    <button type="button" class="btn btn-outline-dark">Aceptar</button>
+                    <button id="cambiarPswBtn" type="button" class="btn btn-outline-dark">Aceptar</button>
                 </div>
             </div>
             <div class="cambiarnombre col-6 px-5">
                 <h3 class="text-center">Cambiar nombre</h3>
                 <div class="form-floating mb-3 mb-2">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Contraseña</label>
+                    <input type="password" class="form-control" id="inputPsw" placeholder="Contraseña">
+                    <label for="inputPsw">Contraseña</label>
                 </div><div class="form-floating mb-3 mb-2">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Nuevo usuario</label>
+                    <input type="text" class="form-control" id="nuevoUser" placeholder="Nuevo usuario">
+                    <label for="nuevoUser">Nuevo usuario</label>
                 </div>
                 <div class="col-12 d-flex justify-content-center m-3">
-                    <button type="button" class="btn btn-outline-dark">Aceptar</button>
+                    <button id="cambiarUserBtn" type="button" class="btn btn-outline-dark">Aceptar</button>
                 </div>
             </div>
         </div>
@@ -93,6 +104,6 @@
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <!-- Mi archivo JS -->
-    <!-- <script src="./Js/script.js"></script> -->
+    <script src="./Js/perfil.js"></script>
 </body>
 </html>
