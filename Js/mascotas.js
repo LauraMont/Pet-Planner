@@ -32,6 +32,7 @@ class Mascota{
     }
 }
 /* Funciones */
+//Agrega una card mascota a la lista
 function agregarCardMascota(mascota){
     let contenedor = document.createElement("div");
     //Agregamos perfil a la pagina de mascotas
@@ -65,7 +66,6 @@ function agregarCardMascota(mascota){
 contenedor.className = "card mb-3  card bg-petcard pt-3 mx-3";
 document.getElementById("listaMascotas").appendChild(contenedor);
 }
-
 //Copia la informacion en cada card correspondiente al orden alfabetico 
 //y agrega una con el ultimo elemento que se ingreso
 function asignarPetCardsMascotas(mascotas){
@@ -76,10 +76,29 @@ function asignarPetCardsMascotas(mascotas){
     });
     guardarMascotas(mascotas);
 }
-
+//Actualiza los datos de las mascotas en el storage
 function guardarMascotas(mascotas){
     localStorage.setItem('mascotas', JSON.stringify(mascotas));
 }
+//Actualiza a la hora actual ante alguna modificacion
+function ActualizarHora(hora ,user){
+    let dt = DateTime.now();
+    dt = dt.toLocaleString(DateTime.DATETIME_SHORT);
+    hora.innerHTML = "Ultima actualizacion " + dt;
+    user.update = dt;
+    guardarDatosUsuario(user);
+}
+/* Variables de DOM y storage*/
+const pets = JSON.parse(localStorage.getItem('mascotas')),
+    AgregarBtn = document.getElementById('AgregarBtn') ,
+    Nombre = document.getElementById('Nombre'),
+    Especie = document.getElementById('Especie'),
+    Edad = document.getElementById('Edad'),
+    Raza = document.getElementById('Raza'),
+    Peso = document.getElementById('Peso'),
+    Imagen = document.getElementById('animales');
+let sesion = JSON.parse(localStorage.getItem('sesionActiva'));
+/* Eventos */
 //Agrega event a cada boton-trash de las cards
 function actulizarBtnpet(){
     const BtnTrashPet = document.querySelectorAll(".btn_trash");
@@ -151,6 +170,7 @@ function actulizarEditpet(){
         );
     });
 }
+//Inicializa el evento del log out 
 function BtnCerrarSesion(btnLogOut ,sesion) {
     btnLogOut.addEventListener('click', () => {
         localStorage.setItem('sesionActiva', false);
@@ -159,17 +179,7 @@ function BtnCerrarSesion(btnLogOut ,sesion) {
         LogOut();
     });
 }
-/* Variables de DOM y storage*/
-const pets = JSON.parse(localStorage.getItem('mascotas')),
-AgregarBtn = document.getElementById('AgregarBtn') ,
-            Nombre = document.getElementById('Nombre'),
-            Especie = document.getElementById('Especie'),
-            Edad = document.getElementById('Edad'),
-            Raza = document.getElementById('Raza'),
-            Peso = document.getElementById('Peso'),
-            Imagen = document.getElementById('animales');
-let sesion = JSON.parse(localStorage.getItem('sesionActiva'));
-/* Eventos */
+//Evento del boton del formulario para agregar una nueva mascota
 AgregarBtn.addEventListener('click', ()=>{
     if(Nombre.value && Nombre.value!=" "){
         pets.push(new Mascota(Nombre.value, Especie.value,Edad.value, Peso.value, Raza.value, Imagen.value));

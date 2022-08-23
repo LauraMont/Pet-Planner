@@ -7,10 +7,11 @@ Queda pendiete la eliminacion de un nota rapida
 
 /* Clases */
 class Usuario {
-    constructor(user, psw ,img) {
+    constructor(user, psw ,img ,date) {
         this.user = user;
         this.password = psw;
         this.imagen = img;
+        this.update = date;
     }
     cambiarDatos(op) {
         switch (op) {
@@ -154,7 +155,7 @@ function IniciarSesion(mascotas, notas, nombre) {
     console.log(sesion);
 
 }
-
+//Oculta el home de usuario y vuelve al login
 function LogOut() {
     home = document.querySelectorAll('.d-view'),
         login = document.querySelectorAll('.d-none');
@@ -171,6 +172,82 @@ function recuperarUsuario() {
     let user = JSON.parse(localStorage.getItem('usuario'));
     user & localStorage.setItem('usuario', JSON.stringify(usuario));
     return user;
+}
+
+/* Fin de Funciones */
+
+/* Variables para inicializar el storage*/
+let usuario = new Usuario("LauraMontaño", "Laura1234" ,"./img/anonimo.png" ,"10/14/1983, 1:30 PM");
+let mascotas = [new Mascota("Sasha", "perro", 5, 10, "golden", "./img/perro.png"),
+new Mascota("Manolo", "gato", 12, 4.5, "none", "./img/gato.png"),
+new Mascota("Windy", "gato", 8, 4, "none", "./img/gato.png")];
+let notaRapida = ["Bañar a sasha mañana!"];
+let sesionActiva = false;
+
+/* Variables con informacion del local storage */
+const pets = JSON.parse(localStorage.getItem('mascotas')),
+    notes = JSON.parse(localStorage.getItem('notaRapida'));
+let sesion = JSON.parse(localStorage.getItem('sesionActiva'));
+//Inicializacion de valores en storage en caso de no tener
+pets & localStorage.setItem('mascotas', JSON.stringify(mascotas));
+notes & localStorage.setItem('notaRapida', JSON.stringify(notaRapida));
+sesion & localStorage.setItem('sesionActiva', JSON.stringify(sesionActiva));
+/* Variables del DOM */
+const ingresarBtn = document.getElementById('ingresarBtn'),
+    misMascotasTab = document.getElementById('misMascotasTab'),
+    user = document.getElementById('user'),
+    psw = document.getElementById('Password'),
+    AgregarNotaBtn = document.getElementById('AgregarNotaBtn'),
+    AgregarNotaInp = document.getElementById('AgregarNotaInp'),
+    BtnTrashNote = document.querySelectorAll(".btn_trash");
+
+/* Eventos */
+//Caso donde el usuario sigo con la sesion
+if (sesion) {
+    IniciarSesion(pets, notes, usuario.user);
+    btnLogOut = document.querySelector('#LogOut a');
+    BtnCerrarSesion(btnLogOut ,sesion);
+} 
+//Caso donde el usuario cerro sesion o no ha iniciado aun
+else {
+    if (ingresarBtn) {
+        ingresarBtn.addEventListener('click', (e) => {
+            let usuario = recuperarUsuario();
+            if ((user.value == usuario.user) && (psw.value == usuario.password)) {
+                btnLogOut = document.querySelector('#LogOut a');
+                BtnCerrarSesion(btnLogOut ,sesion);
+                IniciarSesion(pets, notes, usuario.user);
+            }
+            else {
+                Swal.fire('Login', 'Usuario y/o contraseña invalidos.', 'error');
+            }
+            e.preventDefault();
+        });
+    }
+}
+//Evento del boton de login
+if (AgregarNotaBtn) {
+    AgregarNotaBtn.addEventListener('click', () => {
+        if (AgregarNotaInp.value != '') {
+            agregarCardNota(notes, AgregarNotaInp.value);
+            Toastify({
+                text: "Nota agregada",
+                duration: 3000,
+                newWindow: true,
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                    background: "linear-gradient(to right, #76BA99, #76BA99)",
+                    color: "black",
+                    border: "solid 1px grey",
+                },
+            }).showToast();
+            actulizarBtsTrash()
+        } else {
+            Swal.fire('Descripcion de Nota Rapida', 'La Descripcion debe tener el menos un caracter', 'warning');
+        }
+    })
 }
 //Agrega event a cada boton de las cards
 function actulizarBtsTrash() {
@@ -203,80 +280,7 @@ function actulizarBtsTrash() {
         );
     });
 }
-/* Fin de Funciones */
-
-/* Variables para inicializar el storage*/
-let usuario = new Usuario("LauraMontaño", "Laura1234" ,"./img/anonimo.png");
-let mascotas = [new Mascota("Sasha", "perro", 5, 10, "golden", "./img/perro.png"),
-new Mascota("Manolo", "gato", 12, 4.5, "none", "./img/gato.png"),
-new Mascota("Windy", "gato", 8, 4, "none", "./img/gato.png")];
-let notaRapida = ["Bañar a sasha mañana!"];
-let sesionActiva = false;
-
-/* Variables con informacion del local storage */
-const pets = JSON.parse(localStorage.getItem('mascotas')),
-    notes = JSON.parse(localStorage.getItem('notaRapida'));
-let sesion = JSON.parse(localStorage.getItem('sesionActiva'));
-//Inicializacion de valores en storage en caso de no tener
-pets & localStorage.setItem('mascotas', JSON.stringify(mascotas));
-notes & localStorage.setItem('notaRapida', JSON.stringify(notaRapida));
-sesion & localStorage.setItem('sesionActiva', JSON.stringify(sesionActiva));
-/* Variables del DOM */
-const ingresarBtn = document.getElementById('ingresarBtn'),
-    misMascotasTab = document.getElementById('misMascotasTab'),
-    user = document.getElementById('user'),
-    psw = document.getElementById('Password'),
-    AgregarNotaBtn = document.getElementById('AgregarNotaBtn'),
-    AgregarNotaInp = document.getElementById('AgregarNotaInp'),
-    BtnTrashNote = document.querySelectorAll(".btn_trash");
-
-/* Eventos */
-if (sesion) {
-    IniciarSesion(pets, notes, usuario.user);
-    btnLogOut = document.querySelector('#LogOut a');
-    BtnCerrarSesion(btnLogOut ,sesion);
-} else {
-    if (ingresarBtn) {
-        ingresarBtn.addEventListener('click', (e) => {
-            let usuario = recuperarUsuario();
-            if ((user.value == usuario.user) && (psw.value == usuario.password)) {
-                btnLogOut = document.querySelector('#LogOut a');
-                BtnCerrarSesion(btnLogOut ,sesion);
-                IniciarSesion(pets, notes, usuario.user);
-            }
-            else {
-                Swal.fire('Login', 'Usuario y/o contraseña invalidos.', 'error');
-            }
-            e.preventDefault();
-
-        });
-    }
-}
-
-if (AgregarNotaBtn) {
-    AgregarNotaBtn.addEventListener('click', () => {
-        if (AgregarNotaInp.value != '') {
-            agregarCardNota(notes, AgregarNotaInp.value);
-            Toastify({
-                text: "Nota agregada",
-                duration: 3000,
-                newWindow: true,
-                gravity: "top", // `top` or `bottom`
-                position: "right", // `left`, `center` or `right`
-                stopOnFocus: true, // Prevents dismissing of toast on hover
-                style: {
-                    background: "linear-gradient(to right, #76BA99, #76BA99)",
-                    color: "black",
-                    border: "solid 1px grey",
-                },
-            }).showToast();
-            actulizarBtsTrash()
-        } else {
-            Swal.fire('Descripcion de Nota Rapida', 'La Descripcion debe tener el menos un caracter', 'warning');
-        }
-    })
-}
-
+//Evento del boton de log out (es una funcion ya que puede no aparecer al cargarse la pagina)
 function BtnCerrarSesion(btnLogOut ,sesion) {
     btnLogOut.addEventListener('click', () => {
         localStorage.setItem('sesionActiva', false);
