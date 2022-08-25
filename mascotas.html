@@ -37,23 +37,23 @@
         <section id="agregarMascota" class="row pt-5 mx-5">
             <h3 class="text-center">Agregar mascota</h3>
             <div class="form-floating mb-3 mb-2 col-4">
-                <input type="text" class="form-control" id="Nombre" >
+                <input type="text" class="form-control" id="Nombre" placeholder="Nombre" >
                 <label for="Nombre">Nombre</label>
             </div>
             <div class="form-floating mb-3 mb-2 col-4">
-                <input type="text" class="form-control" id="Especie">
+                <input type="text" class="form-control" id="Especie" placeholder="Especie" >
                 <label for="Especie">Especie</label>
             </div>
             <div class="form-floating mb-3 mb-2 col-4">
-                <input type="text" class="form-control" id="Edad">
+                <input type="text" class="form-control" id="Edad" placeholder="Edad" >
                 <label for="Edad">Edad</label>
             </div>
             <div class="form-floating mb-3 mb-2 col-4">
-                <input type="text" class="form-control" id="Raza">
+                <input type="text" class="form-control" id="Raza" placeholder="Raza" >
                 <label for="Raza">Raza</label>
             </div>
             <div class="form-floating mb-3 mb-2 col-4">
-                <input type="text" class="form-control" id="Peso">
+                <input type="text" class="form-control" id="Peso" placeholder="Peso" >
                 <label for="Peso">Peso</label>
             </div>
             <div class="col-4">
@@ -70,6 +70,14 @@
                     <option value="./img/snake.png">serpiente</option>
                     <option value="./img/otro.png">otro</option>
                 </select>
+            </div>
+            <div class="col-4">
+                <label for="bitacora" class="form-label">Bitacora</label>
+                <textarea class="form-control" id="bitacora" rows="3"></textarea>
+            </div>
+            <div class="col-4">
+                <label for="vacunas" class="form-label">Vacunas</label>
+                <textarea class="form-control" id="vacunas" rows="3"></textarea>
             </div>
             <div class="col-12 d-flex justify-content-center m-3">
                 <button id="AgregarBtn" type="button" class="btn btn-outline-dark">Agregar</button>

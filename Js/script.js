@@ -33,26 +33,19 @@ class Usuario {
         }
     }
 }
-class Mascota {
-    constructor(nombre, especie, edad, peso, raza, imagen, vacunas, bitacora) {
+class Mascota{
+    constructor(nombre, especie, edad, peso, raza,imagen,vacunas,bitacora ){
         this.nombre = nombre;
         this.especie = especie;
         this.edad = edad;
         this.peso = peso;
         this.raza = "none";
-        this.bitacora = [];
-        this.vacunas = [];
         this.imagen = imagen;
-
-        if (raza != undefined) {
+        if(raza != undefined){
             this.raza = raza;
         }
-        if (vacunas != undefined) {
-            this.vacunas.push(vacunas);
-        }
-        if (bitacora != undefined) {
-            this.bitacora.push(bitacora);
-        }
+        this.vacunas = vacunas ;
+        this.bitacora = bitacora ;
         if(this.imagen == undefined)
         {
             this.imagen = ' ';
@@ -289,5 +282,21 @@ function BtnCerrarSesion(btnLogOut ,sesion) {
     });
 }
 
+/* fetch */
+async function bringData(){
+    let animales ,
+        avatares ;
+    const response = await fetch('./Js/data.json');
+    const data = await response.json();
+    //Se cargan los datos correspondientes a cada array
+    animales = data.filter((e) => e.Tipo == "animal");
+    avatares = data.filter((e) => e.Tipo == "avatar");
+    localStorage.setItem('animales', JSON.stringify(animales));
+    localStorage.setItem('avatares', JSON.stringify(avatares));
+}
 
+
+window.onload = ()=>{
+    bringData();
+}
 

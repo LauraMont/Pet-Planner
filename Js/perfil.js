@@ -73,4 +73,19 @@ window.onload = ()=>{
     psw.innerHTML += user.password;
     document.getElementById("Avatar").src=user.imagen;
     hora.innerHTML = "Ultima actualizacion " + user.update;
+    AgregarOpciones();
+}
+
+function AgregarOpciones(){
+    let avatares = JSON.parse(localStorage.getItem('avatares'));
+    console.log(avatares);
+    avatares.forEach(element => {
+        agregar(element);
+    });
+}
+function agregar(element){
+    let contenedor = document.createElement("option");
+    contenedor.value =`${element.imagen}}`
+    contenedor.innerHTML = `${element.nombre}`;
+    document.getElementById("selectAvatar").appendChild(contenedor);
 }

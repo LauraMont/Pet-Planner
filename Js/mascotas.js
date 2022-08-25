@@ -12,19 +12,12 @@ class Mascota{
         this.edad = edad;
         this.peso = peso;
         this.raza = "none";
-        this.bitacora = [];
-        this.vacunas = [];
         this.imagen = imagen;
-
         if(raza != undefined){
             this.raza = raza;
         }
-        if(vacunas != undefined){
-            this.vacunas.push(vacunas) ;
-        }
-        if(bitacora != undefined){
-            this.bitacora.push(bitacora) ;
-        }
+        this.vacunas = vacunas ;
+        this.bitacora = bitacora ;
         if(this.imagen == undefined)
         {
             this.imagen = ' ';
@@ -96,6 +89,8 @@ const pets = JSON.parse(localStorage.getItem('mascotas')),
     Edad = document.getElementById('Edad'),
     Raza = document.getElementById('Raza'),
     Peso = document.getElementById('Peso'),
+    bitacora = document.getElementById('bitacora'),
+    vacunas = document.getElementById('vacunas'),
     Imagen = document.getElementById('animales');
 let sesion = JSON.parse(localStorage.getItem('sesionActiva'));
 /* Eventos */
@@ -182,7 +177,7 @@ function BtnCerrarSesion(btnLogOut ,sesion) {
 //Evento del boton del formulario para agregar una nueva mascota
 AgregarBtn.addEventListener('click', ()=>{
     if(Nombre.value && Nombre.value!=" "){
-        pets.push(new Mascota(Nombre.value, Especie.value,Edad.value, Peso.value, Raza.value, Imagen.value));
+        pets.push(new Mascota(Nombre.value, Especie.value,Edad.value, Peso.value, Raza.value, Imagen.value ,vacunas.value ,bitacora.value));
         pets.sort((a, b) => {//Ordena por orden alfabetico la lista de mascotas
             if (a.nombre.toUpperCase() > b.nombre.toUpperCase()) {
                 return 1;

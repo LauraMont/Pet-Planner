@@ -1,0 +1,87 @@
+[
+    {
+        "imagen": "./img/gato.png",
+        "nombre": "gato",
+        "Tipo": "animal"
+    },
+    {
+        "imagen": "./img/conejo.png",
+        "nombre": "conejo",
+        "Tipo": "animal"
+    },
+    {
+        "imagen": "./img/fox.png",
+        "nombre": "fox",
+        "Tipo": "animal"
+    },
+    {
+        "imagen": "./img/tortle.png",
+        "nombre": "tortle",
+        "Tipo": "animal"
+    },
+    {
+        "imagen": "./img/hen.png",
+        "nombre": "hen",
+        "Tipo": "animal"
+    },
+    {
+        "imagen": "./img/clown-fish.png",
+        "nombre": "pez",
+        "Tipo": "animal"
+    },
+    {
+        "imagen": "./img/chameleon.png",
+        "nombre": "camaleon",
+        "Tipo": "animal"
+    },
+    {
+        "imagen": "./img/otro.png",
+        "nombre": "otro",
+        "Tipo": "animal"
+    },
+    {
+        "imagen": "./img/perro.png",
+        "nombre": "perro",
+        "Tipo": "animal"
+    },
+    {
+        "imagen": "./img/anonimo.png",
+        "nombre": "anonimo",
+        "Tipo": "avatar"
+    },
+    {
+        "imagen": "./img/p1.png",
+        "nombre": "avatar1",
+        "Tipo": "avatar"
+    },
+    {
+        "imagen": "./img/p2.png",
+        "nombre": "avatar2",
+        "Tipo": "avatar"
+    },
+    {
+        "imagen": "./img/p3.png",
+        "nombre": "avatar3",
+        "Tipo": "avatar"
+    },
+    {
+        "imagen": "./img/p4.png",
+        "nombre": "avatar4",
+        "Tipo": "avatar"
+    },
+    {
+        "imagen": "./img/p5.png",
+        "nombre": "avatar5",
+        "Tipo": "avatar"
+    },
+    {
+        "imagen": "./img/p6.png",
+        "nombre": "avatar6",
+        "Tipo": "avatar"
+    },
+    {
+        "imagen": "./img/p7.png",
+        "nombre": "avatar7",
+        "Tipo": "avatar"
+    }
+]
