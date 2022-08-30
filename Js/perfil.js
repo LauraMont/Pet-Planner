@@ -15,8 +15,8 @@ function guardarDatosUsuario(usuario) {
 }
 //Actualiza a la hora actual ante alguna modificacion
 function ActualizarHora(hora ,user){
-    let dt = DateTime.now();
-    dt = dt.toLocaleString(DateTime.DATETIME_SHORT);
+    let dt = luxon.DateTime.now();
+    dt = dt.toLocaleString(luxon.DateTime.DATETIME_SHORT);
     hora.innerHTML = "Ultima actualizacion " + dt;
     user.update = dt;
     guardarDatosUsuario(user);
