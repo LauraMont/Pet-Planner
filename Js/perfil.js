@@ -85,7 +85,7 @@ function AgregarOpciones(){
 }
 function agregar(element){
     let contenedor = document.createElement("option");
-    contenedor.value =`${element.imagen}}`
+    contenedor.value =`${element.imagen}`
     contenedor.innerHTML = `${element.nombre}`;
     document.getElementById("selectAvatar").appendChild(contenedor);
 }

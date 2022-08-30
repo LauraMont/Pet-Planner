@@ -82,7 +82,7 @@ function ActualizarHora(hora ,user){
     guardarDatosUsuario(user);
 }
 /* Variables de DOM y storage*/
-const pets = JSON.parse(localStorage.getItem('mascotas')),
+let pets = JSON.parse(localStorage.getItem('mascotas')),
     AgregarBtn = document.getElementById('AgregarBtn') ,
     Nombre = document.getElementById('Nombre'),
     Especie = document.getElementById('Especie'),
@@ -125,7 +125,7 @@ function actulizarBtnpet(){
     });
 }
 //Agrega event a cada boton-edit de las cards
-function actulizarEditpet(){
+function actulizarEditpet(pets){
     const BtnEditPet = document.querySelectorAll(".btn_edit");
     BtnEditPet.forEach((mascota,index) => {
         mascota.addEventListener('click', () => {
@@ -143,20 +143,70 @@ function actulizarEditpet(){
                     'bitacora': 'Bitacora',
                 },
                 inputPlaceholder: 'Selecciona un dato',
-                showCancelButton: true,
-                inputValidator: (value) => {
+                showCancelButton: true, 
+                inputValidator: (campo) => {
                     return new Promise((resolve) => {
-                        if (value ) {
+                        if(campo == 'imagen'){
+                            let imagenes = JSON.parse(localStorage.getItem('animales'));
+                            const { value: mascota } = Swal.fire({
+                                title:`Seleccionar ${campo} `,
+                                input: 'select',
+                                inputOptions: {
+                                    "./img/gato.png": "gato",
+                                    "./img/conejo.png": "conejo",
+                                    "./img/fox.png": "zorro",
+                                    "./img/tortle.png": "tortuga",
+                                    "./img/hen.png": "gallina",
+                                    "./img//clown-fish.png": "pez",
+                                    "./img/chameleon.png": "camaleon",
+                                    "./img/perro.png": "perro",
+                                    "./img/otro.png": "otro"
+                                },
+                                inputPlaceholder: 'Elija una mascota',
+                                showCancelButton: true,
+                                inputValidator: (value) => {
+                                    return new Promise((resolve) => {
+                                    if (value) {
+                                        pets[index][`${campo}`]=value;
+                                        asignarPetCardsMascotas(pets);
+                                        guardarMascotas(pets);
+                                        actulizarBtnpet();
+                                        actulizarEditpet(pets);
+                                    }
+                                    })
+                                }
+                                })
+                                if (!fruit) {
+                                    Swal.fire(`Debes seleccionar una imagen`)
+                                }
+                            
+                        }else if (campo ) {
                             const { value: data } =  Swal.fire({
-                                title: `Ingresar nueva informacion(${value}) `,
+                                title: `Ingresar nueva informacion(${campo}) `,
                                 input: 'text',
                                 inputPlaceholder: 'Ingresa nuevo dato',
+                                showCancelButton: true,
                                 inputAttributes: {
                                     maxlength: 50,
                                     autocapitalize: 'off',
                                     autocorrect: 'off'
+                                },
+                                inputValidator: (value) =>{
+                                    if (value){
+                                        //guardar dato
+                                        console.log(campo ,index ,value ,data);
+                                        console.log(pets[0].nombre);
+                                        pets[index][`${campo}`]=value;
+                                        console.log(pets[index][`${campo}`]);
+                                        console.log(pets[0].nombre);
+                                        asignarPetCardsMascotas(pets);
+                                        actulizarBtnpet();
+                                        actulizarEditpet(pets);
+                                        guardarMascotas(pets);
+                                    }
                                 }
                             }) 
+                            
                         }
                     })
                 }
@@ -165,6 +215,17 @@ function actulizarEditpet(){
         );
     });
 }
+function InicializarBtnOk(index, campo){
+    let btn = document.querySelector('.swal2-actions button');
+    let input = document.querySelector ('.swal2-popup input');
+    btn.addEventListener('click', ()=>{
+        if(input.value != ""){
+            pets[index].campo = input.value;
+            asignarPetCardsMascotas(pets);
+        }
+    })
+}
+
 //Inicializa el evento del log out 
 function BtnCerrarSesion(btnLogOut ,sesion) {
     btnLogOut.addEventListener('click', () => {
@@ -199,7 +260,20 @@ AgregarBtn.addEventListener('click', ()=>{
 window.onload = ()=>{
     asignarPetCardsMascotas(pets);
     actulizarBtnpet();
-    actulizarEditpet()
+    actulizarEditpet(pets)
     btnLogOut = document.querySelector('#LogOut a');
     BtnCerrarSesion(btnLogOut ,sesion);
+    AgregarOpciones();
+}
+function AgregarOpciones(){
+    let animales = JSON.parse(localStorage.getItem('animales'));
+    animales.forEach(element => {
+        agregar(element);
+    });
+}
+function agregar(element){
+    let contenedor = document.createElement("option");
+    contenedor.value =`${element.imagen}}`
+    contenedor.innerHTML = `${element.nombre}`;
+    document.getElementById("animales").appendChild(contenedor);
 }

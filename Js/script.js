@@ -294,8 +294,6 @@ async function bringData(){
     localStorage.setItem('animales', JSON.stringify(animales));
     localStorage.setItem('avatares', JSON.stringify(avatares));
 }
-
-
 window.onload = ()=>{
     bringData();
 }
