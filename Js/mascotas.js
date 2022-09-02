@@ -4,7 +4,6 @@ Se puede agregar una mascota a la lista con el formulario (el obligatorio el cam
 Las cards se ordenaran por orden alfabetico
 Queda pendiente la eliminacion de las cards junto con su edicion
  */
-/* Clases */
 class Mascota{
     constructor(nombre, especie, edad, peso, raza,imagen,vacunas,bitacora ){
         this.nombre = nombre;
@@ -13,14 +12,24 @@ class Mascota{
         this.peso = peso;
         this.raza = "none";
         this.imagen = imagen;
+        this.vacunas = vacunas ;
+        this.bitacora = bitacora ;
+        let dt = luxon.DateTime.now();
+        this.update = dt.toLocaleString(luxon.DateTime.DATETIME_SHORT);
         if(raza != undefined){
             this.raza = raza;
         }
-        this.vacunas = vacunas ;
-        this.bitacora = bitacora ;
         if(this.imagen == undefined)
         {
             this.imagen = ' ';
+        }
+        if(this.vacunas == undefined)
+        {
+            this.vacunas = ' ';
+        }
+        if(this.bitacora == undefined)
+        {
+            this.bitacora = ' ';
         }
     }
 }
@@ -40,10 +49,11 @@ function agregarCardMascota(mascota){
                                             Edad: ${mascota.edad}
                                             <br>Especie: ${mascota.especie}
                                             <br>Raza: ${mascota.raza}
+                                            <br>Peso: ${mascota.peso}
                                             <br>Bitacora: ${mascota.bitacora}
                                             <br>Vacunas: ${mascota.vacunas}
                                         </p>
-                                        <p class="card-text text-white mb-1"><small class="text-white">Last updated 3 mins ago</small></p>
+                                        <p class="card-text text-white mb-1"><small class="text-white">Last updated: ${mascota.update}</small></p>
                                     </div>
                                 </div>
                                 <div class="col-md-8 d-flex justify-content-evenly mb-3">
@@ -108,16 +118,12 @@ function actulizarBtnpet(){
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
-                if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )                    
+                if (result.isConfirmed) {                 
                     console.log(index);
                     pets.splice(index, 1);
                     asignarPetCardsMascotas(pets);
                     guardarMascotas(pets);
+                    CardMascota_Toasty(`Se actualizo lista de mascotas con exito`);
                 }
             })
         }
@@ -155,7 +161,7 @@ function actulizarEditpet(pets){
                                     "./img/gato.png": "gato",
                                     "./img/conejo.png": "conejo",
                                     "./img/fox.png": "zorro",
-                                    "./img/tortle.png": "tortuga",
+                                    "./img/turtle.png": "tortuga",
                                     "./img/hen.png": "gallina",
                                     "./img//clown-fish.png": "pez",
                                     "./img/chameleon.png": "camaleon",
@@ -168,6 +174,8 @@ function actulizarEditpet(pets){
                                     return new Promise((resolve) => {
                                     if (value) {
                                         pets[index][`${campo}`]=value;
+                                        let dt = luxon.DateTime.now();
+                                        pets[index]['update'] = dt.toLocaleString(luxon.DateTime.DATETIME_SHORT);
                                         asignarPetCardsMascotas(pets);
                                         guardarMascotas(pets);
                                         actulizarBtnpet();
@@ -176,9 +184,7 @@ function actulizarEditpet(pets){
                                     })
                                 }
                                 })
-                                if (!fruit) {
-                                    Swal.fire(`Debes seleccionar una imagen`)
-                                }
+                                
                             
                         }else if (campo ) {
                             const { value: data } =  Swal.fire({
@@ -194,15 +200,14 @@ function actulizarEditpet(pets){
                                 inputValidator: (value) =>{
                                     if (value){
                                         //guardar dato
-                                        console.log(campo ,index ,value ,data);
-                                        console.log(pets[0].nombre);
                                         pets[index][`${campo}`]=value;
-                                        console.log(pets[index][`${campo}`]);
-                                        console.log(pets[0].nombre);
+                                        let dt = luxon.DateTime.now();
+                                        pets[index]['update'] = dt.toLocaleString(luxon.DateTime.DATETIME_SHORT);
                                         asignarPetCardsMascotas(pets);
                                         actulizarBtnpet();
                                         actulizarEditpet(pets);
                                         guardarMascotas(pets);
+                                        CardMascota_Toasty(`Se actualizó la información de ${pets[index].nombre}`)
                                     }
                                 }
                             }) 
@@ -252,6 +257,7 @@ AgregarBtn.addEventListener('click', ()=>{
     asignarPetCardsMascotas(pets) ;
     actulizarBtnpet();
     actulizarEditpet();
+    CardMascota_Toasty(`Se agrego mascota con exito: Bienvenido/a ${Nombre.value}!!`)
     }else{
         Swal.fire('Nombre de mascota','El campo nombre es obligatorio','error');
     }
@@ -273,7 +279,23 @@ function AgregarOpciones(){
 }
 function agregar(element){
     let contenedor = document.createElement("option");
-    contenedor.value =`${element.imagen}}`
+    contenedor.value =`${element.imagen}`
     contenedor.innerHTML = `${element.nombre}`;
     document.getElementById("animales").appendChild(contenedor);
+}
+
+function CardMascota_Toasty(msj){
+    Toastify({
+        text: msj,
+        duration: 3000,
+        newWindow: true,
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+            background: "linear-gradient(to right, #76BA99, #76BA99)",
+            color: "black",
+            border: "solid 1px grey",
+        },
+    }).showToast();
 }

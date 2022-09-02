@@ -41,16 +41,33 @@ class Mascota{
         this.peso = peso;
         this.raza = "none";
         this.imagen = imagen;
+        this.vacunas = vacunas ;
+        this.bitacora = bitacora ;
+        let dt = luxon.DateTime.now();
+        this.update = dt.toLocaleString(luxon.DateTime.DATETIME_SHORT);
         if(raza != undefined){
             this.raza = raza;
         }
-        this.vacunas = vacunas ;
-        this.bitacora = bitacora ;
         if(this.imagen == undefined)
         {
             this.imagen = ' ';
         }
+        if(this.vacunas == undefined)
+        {
+            this.vacunas = ' ';
+        }
+        if(this.bitacora == undefined)
+        {
+            this.bitacora = ' ';
+        }
     }
+}
+class Nota{
+    constructor(description){
+        let dt = luxon.DateTime.now();
+        this.description = description;
+        this.date = dt.toLocaleString(luxon.DateTime.DATETIME_SHORT);
+    } 
 }
 /* Fin de clases */
 /* Funciones */
@@ -102,13 +119,13 @@ function agregarCardNota(notas, nota) {
         let contenedor = document.createElement("div");
         //Definimos el innerHTML del elemento con una plantilla de texto
         contenedor.innerHTML = `<div  class="card-header">
-                                    Fecha: dd/mm/aa 
+                                    Fecha: ${element.date}
                                     <a id="${id}" class="btn btn_trash">
                                         <img src="./img/trash.png" alt="">                             
                                     </a>
                                 </div>
                                 <div  class="card-body">
-                                    <p class="card-text">${element}</p>
+                                    <p class="card-text">${element.description}</p>
                                 </div>`;
         contenedor.className = "card text-dark c2 mb-3";
         document.getElementById("NotasRapidas").appendChild(contenedor);
@@ -174,7 +191,7 @@ let usuario = new Usuario("LauraMontaño", "Laura1234" ,"./img/anonimo.png" ,"10
 let mascotas = [new Mascota("Sasha", "perro", 5, 10, "golden", "./img/perro.png"),
 new Mascota("Manolo", "gato", 12, 4.5, "none", "./img/gato.png"),
 new Mascota("Windy", "gato", 8, 4, "none", "./img/gato.png")];
-let notaRapida = ["Bañar a sasha mañana!"];
+let notaRapida = [new Nota("Bañar a sasha mañana!")];
 let sesionActiva = false;
 
 /* Variables con informacion del local storage */
@@ -222,7 +239,7 @@ else {
 if (AgregarNotaBtn) {
     AgregarNotaBtn.addEventListener('click', () => {
         if (AgregarNotaInp.value != '') {
-            agregarCardNota(notes, AgregarNotaInp.value);
+            agregarCardNota(notes, new Nota(AgregarNotaInp.value));
             Toastify({
                 text: "Nota agregada",
                 duration: 3000,
@@ -297,4 +314,3 @@ async function bringData(){
 window.onload = ()=>{
     bringData();
 }
-

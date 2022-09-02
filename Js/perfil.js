@@ -21,6 +21,21 @@ function ActualizarHora(hora ,user){
     user.update = dt;
     guardarDatosUsuario(user);
 }
+//Agrega al select de avatares las opciones
+function AgregarOpciones(){
+    let avatares = JSON.parse(localStorage.getItem('avatares'));
+    console.log(avatares);
+    avatares.forEach(element => {
+        agregar(element);
+    });
+}
+//Agrega estructura de una opcion
+function agregar(element){
+    let contenedor = document.createElement("option");
+    contenedor.value =`${element.imagen}`
+    contenedor.innerHTML = `${element.nombre}`;
+    document.getElementById("selectAvatar").appendChild(contenedor);
+}
 /* Variables de DOM y storage*/
 let sesion = JSON.parse(localStorage.getItem('sesionActiva'));
     /*Card de info de usuario  */
@@ -76,16 +91,3 @@ window.onload = ()=>{
     AgregarOpciones();
 }
 
-function AgregarOpciones(){
-    let avatares = JSON.parse(localStorage.getItem('avatares'));
-    console.log(avatares);
-    avatares.forEach(element => {
-        agregar(element);
-    });
-}
-function agregar(element){
-    let contenedor = document.createElement("option");
-    contenedor.value =`${element.imagen}`
-    contenedor.innerHTML = `${element.nombre}`;
-    document.getElementById("selectAvatar").appendChild(contenedor);
-}
