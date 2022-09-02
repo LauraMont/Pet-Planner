@@ -134,13 +134,15 @@ function agregarCardNota(notas, nota) {
     guardarNotasRapidas(notas)
     actulizarBtsTrash();
 }
-//Guardar datos en el storage 
+//Guardar datos del usuario en el storage 
 function guardarDatosUsuario(usuario) {
     localStorage.setItem('usuario', JSON.stringify(usuario));
 }
+//Guardar datos de las mascotas en el storage 
 function guardarMascotas(mascotas) {
     localStorage.setItem('mascotas', JSON.stringify(mascotas));
 }
+//Guardar datos de las notas rapidas en el storage 
 function guardarNotasRapidas(notaRapida) {
     localStorage.setItem('notaRapida', JSON.stringify(notaRapida));
 }
@@ -195,13 +197,23 @@ let notaRapida = [new Nota("Bañar a sasha mañana!")];
 let sesionActiva = false;
 
 /* Variables con informacion del local storage */
-const pets = JSON.parse(localStorage.getItem('mascotas')),
-    notes = JSON.parse(localStorage.getItem('notaRapida'));
-let sesion = JSON.parse(localStorage.getItem('sesionActiva'));
-//Inicializacion de valores en storage en caso de no tener
-pets & localStorage.setItem('mascotas', JSON.stringify(mascotas));
-notes & localStorage.setItem('notaRapida', JSON.stringify(notaRapida));
-sesion & localStorage.setItem('sesionActiva', JSON.stringify(sesionActiva));
+let pets,
+    notes,
+    sesion;
+//Inicializacion o obtencion de datos en storage 
+JSON.parse(localStorage.getItem('mascotas')) ? 
+    pets = JSON.parse(localStorage.getItem('mascotas')):
+    localStorage.setItem('mascotas', JSON.stringify(mascotas));
+
+
+JSON.parse(localStorage.getItem('notaRapida')) ?
+    notes = JSON.parse(localStorage.getItem('notaRapida')):
+    localStorage.setItem('notaRapida', JSON.stringify(notaRapida));
+    
+
+JSON.parse(localStorage.getItem('sesionActiva')) ?
+    sesion = JSON.parse(localStorage.getItem('sesionActiva')):
+    localStorage.setItem('sesionActiva', JSON.stringify(sesionActiva));
 /* Variables del DOM */
 const ingresarBtn = document.getElementById('ingresarBtn'),
     misMascotasTab = document.getElementById('misMascotasTab'),

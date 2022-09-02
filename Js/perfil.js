@@ -1,7 +1,8 @@
 
 /* Funciones */
 //Funcion que cambia una variable en el storage que me indica si queda iniciada la sesion
-function BtnCerrarSesion(btnLogOut ,sesion) {
+function BtnCerrarSesion() {
+    let btnLogOut = document.querySelector('#LogOut a');
     btnLogOut.addEventListener('click', () => {
         localStorage.setItem('sesionActiva', false);
         sesion = JSON.parse(localStorage.getItem('sesionActiva'))
@@ -24,7 +25,6 @@ function ActualizarHora(hora ,user){
 //Agrega al select de avatares las opciones
 function AgregarOpciones(){
     let avatares = JSON.parse(localStorage.getItem('avatares'));
-    console.log(avatares);
     avatares.forEach(element => {
         agregar(element);
     });
@@ -35,6 +35,31 @@ function agregar(element){
     contenedor.value =`${element.imagen}`
     contenedor.innerHTML = `${element.nombre}`;
     document.getElementById("selectAvatar").appendChild(contenedor);
+}
+//Actualiza la informacion de la card donde se presenta la informacion del usuario
+function ActualizarInfoCard(user){
+    let seleccionado = document.getElementById('selected');
+    let avatares = JSON.parse(localStorage.getItem('avatares'));
+    nombre.innerHTML += user.user;
+    psw.innerHTML += user.password;
+    document.getElementById("Avatar").src=user.imagen;
+    hora.innerHTML = "Ultima actualizacion " + user.update;
+    seleccionado.innerHTML = avatares.find(element => element.imagen==user.imagen).nombre;
+}
+function PerfilToastify(msj){
+    Toastify({
+        text: msj,
+        duration: 3000,
+        newWindow: true,
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+            background: "linear-gradient(to right, #76BA99, #76BA99)",
+            color: "black",
+            border: "solid 1px grey",
+        },
+    }).showToast();
 }
 /* Variables de DOM y storage*/
 let sesion = JSON.parse(localStorage.getItem('sesionActiva'));
@@ -57,10 +82,11 @@ cambiarPswBtn.addEventListener('click' ,()=>{
     if((anteriorPsw.value == user.password) && (nuevaPsw.value.toString().length>5)){
         user.password = nuevaPsw.value;
         guardarDatosUsuario(user);
-        psw.innerHTML = user.password;
+        psw.innerHTML = "Nombre: " + user.password;
         ActualizarHora(hora ,user);
+        PerfilToastify("Se actualizo la constraseña con exito");
     }else{
-        Swal.fire('Contraseña invalida', 'La contraseña no coincide con la actual.', 'error');
+        Swal.fire('Contraseña invalida', 'La contraseña no coincide con la actual o es menor a 6 caracteres', 'error');
     }
 } );
 //evento para boton de formulario de cambio de nombre
@@ -68,10 +94,11 @@ cambiarUserBtn.addEventListener('click' ,()=>{
     if(inputPsw.value == user.password){
         user.user = nuevoUser.value;
         guardarDatosUsuario(user);
-        psw.innerHTML = user.password;
+        nombre.innerHTML = "Usuario: " + user.user;
         ActualizarHora(hora ,user);
+        PerfilToastify("Se actualizo usuario con exito");
     }else{
-        Swal.fire('Contraseña invalida', 'La contraseña no coincide con la actual.', 'error');
+        Swal.fire('Contraseña invalida', 'La contraseña no coincide con la actual o la nueva contraseña es menor a caracteres', 'error');
     }
 } );
 //Cambia automaticamente el avatar del usuario 
@@ -80,14 +107,9 @@ selectAvatar.addEventListener('change' ,()=>{
     user.imagen = selectAvatar.value;
     guardarDatosUsuario(user);
 })
-
 window.onload = ()=>{
-    btnLogOut = document.querySelector('#LogOut a');
-    BtnCerrarSesion(btnLogOut ,sesion);
-    nombre.innerHTML += user.user;
-    psw.innerHTML += user.password;
-    document.getElementById("Avatar").src=user.imagen;
-    hora.innerHTML = "Ultima actualizacion " + user.update;
+    BtnCerrarSesion();
+    ActualizarInfoCard(user)
     AgregarOpciones();
 }
 

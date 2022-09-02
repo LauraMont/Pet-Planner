@@ -91,6 +91,37 @@ function ActualizarHora(hora ,user){
     user.update = dt;
     guardarDatosUsuario(user);
 }
+//Agrega las opciones al select "tipo de mascota"
+function AgregarOpciones(){
+    let animales = JSON.parse(localStorage.getItem('animales'));
+    animales.forEach(element => {
+        agregar(element);
+    });
+}
+//Agrega una option
+function agregar(element){
+    let contenedor = document.createElement("option");
+    contenedor.value =`${element.imagen}`
+    contenedor.innerHTML = `${element.nombre}`;
+    document.getElementById("animales").appendChild(contenedor);
+}
+//Toastify que presenta el msj
+function CardMascota_Toasty(msj){
+    Toastify({
+        text: msj,
+        duration: 3000,
+        newWindow: true,
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+            background: "linear-gradient(to right, #76BA99, #76BA99)",
+            color: "black",
+            border: "solid 1px grey",
+        },
+    }).showToast();
+}
+/* Fin de funciones */
 /* Variables de DOM y storage*/
 let pets = JSON.parse(localStorage.getItem('mascotas')),
     AgregarBtn = document.getElementById('AgregarBtn') ,
@@ -135,6 +166,7 @@ function actulizarEditpet(pets){
     const BtnEditPet = document.querySelectorAll(".btn_edit");
     BtnEditPet.forEach((mascota,index) => {
         mascota.addEventListener('click', () => {
+            //Modal para elegir el dato que se edita
             const { value: dato } =  Swal.fire({
                 title: 'Selecciona el dato que quieres cambiar',
                 input: 'select',
@@ -153,6 +185,7 @@ function actulizarEditpet(pets){
                 inputValidator: (campo) => {
                     return new Promise((resolve) => {
                         if(campo == 'imagen'){
+                            //Modal para elegir cambiar la imagen 
                             let imagenes = JSON.parse(localStorage.getItem('animales'));
                             const { value: mascota } = Swal.fire({
                                 title:`Seleccionar ${campo} `,
@@ -180,6 +213,8 @@ function actulizarEditpet(pets){
                                         guardarMascotas(pets);
                                         actulizarBtnpet();
                                         actulizarEditpet(pets);
+                                        CardMascota_Toasty(`Se actualizó la información de ${pets[index].nombre}`);
+                                        resolve();
                                     }
                                     })
                                 }
@@ -187,6 +222,7 @@ function actulizarEditpet(pets){
                                 
                             
                         }else if (campo ) {
+                            //Modal para cambiar el resto de los datos
                             const { value: data } =  Swal.fire({
                                 title: `Ingresar nueva informacion(${campo}) `,
                                 input: 'text',
@@ -220,17 +256,6 @@ function actulizarEditpet(pets){
         );
     });
 }
-function InicializarBtnOk(index, campo){
-    let btn = document.querySelector('.swal2-actions button');
-    let input = document.querySelector ('.swal2-popup input');
-    btn.addEventListener('click', ()=>{
-        if(input.value != ""){
-            pets[index].campo = input.value;
-            asignarPetCardsMascotas(pets);
-        }
-    })
-}
-
 //Inicializa el evento del log out 
 function BtnCerrarSesion(btnLogOut ,sesion) {
     btnLogOut.addEventListener('click', () => {
@@ -270,32 +295,4 @@ window.onload = ()=>{
     btnLogOut = document.querySelector('#LogOut a');
     BtnCerrarSesion(btnLogOut ,sesion);
     AgregarOpciones();
-}
-function AgregarOpciones(){
-    let animales = JSON.parse(localStorage.getItem('animales'));
-    animales.forEach(element => {
-        agregar(element);
-    });
-}
-function agregar(element){
-    let contenedor = document.createElement("option");
-    contenedor.value =`${element.imagen}`
-    contenedor.innerHTML = `${element.nombre}`;
-    document.getElementById("animales").appendChild(contenedor);
-}
-
-function CardMascota_Toasty(msj){
-    Toastify({
-        text: msj,
-        duration: 3000,
-        newWindow: true,
-        gravity: "top", // `top` or `bottom`
-        position: "right", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-            background: "linear-gradient(to right, #76BA99, #76BA99)",
-            color: "black",
-            border: "solid 1px grey",
-        },
-    }).showToast();
 }
